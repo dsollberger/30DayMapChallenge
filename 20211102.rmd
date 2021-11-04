@@ -1,0 +1,24 @@
+---
+title: "Day 2"
+author: "Derek Sollberger"
+date: "11/2/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("sf") #handle shape files
+library("tmap") #display static maps
+```
+
+```{r}
+# load shape file
+merced_road_shp <- st_read("Merced_County_Road_Centerlines/Road_Centerlines.shp")
+```
+```{r}
+# print map
+tm_shape(merced_road_shp) +
+  tm_lines("gray50") +
+  tm_layout(main.title = "30 Day Map Challenge (Day 2: Lines)")
+```
+

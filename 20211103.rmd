@@ -1,0 +1,49 @@
+---
+title: "Day 2"
+author: "Derek Sollberger"
+date: "11/2/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("ggrepel")
+library("sf") #handle shape files
+library("tidyverse")
+library("tmap") #display static maps
+```
+
+```{r}
+# load shape file
+CA_county_shp <- st_read("CA_Counties/CA_Counties_TIGER2016.shp")
+```
+
+```{r}
+Merced_county_shp <- CA_county_shp %>% filter(NAME == "Merced")
+
+# https://en.wikipedia.org/wiki/Merced_County,_California
+Merced_lat <- -120.71
+Merced_long <- 37.19
+```
+
+
+```{r, eval = FALSE}
+# print map
+tm_shape(CA_county_shp) +
+  tm_polygons("MAP_COLORS") +
+  tm_layout(main.title = "30 Day Map Challenge (Day 3: Polygons)")
+```
+
+```{r}
+CA_county_shp %>%
+  ggplot() +
+  geom_sf() +
+  geom_sf(data = Merced_county_shp, fill = "green") +
+  # geom_label_repel(data = Merced_county_shp, 
+  #               aes(x = Merced_lat, y = Merced_long,
+  #                   label = NAME)) +
+  labs(title = "30 Day Map Challenge",
+       subtitle = "Day 3: Polygons",
+       caption = "Data Source: data.ca.gov")
+```
+

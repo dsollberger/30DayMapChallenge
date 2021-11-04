@@ -1,0 +1,50 @@
+---
+title: '20211101'
+author: "Derek Sollberger"
+date: "10/31/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("leaflet")
+library("tidyverse")
+```
+
+30 Day Map Challenge
+
+Day 1: Points
+
+https://appsilon.com/leaflet-geomaps/
+
+```{r}
+# https://geohack.toolforge.org/geohack.php?pagename=University_of_California,_Merced&params=37.366_N_120.4235_W_region:US-CA_type:edu
+UCM_lat <- 37.366
+UCM_long <- -120.4235
+
+data_df <- data.frame(lat = UCM_lat, long = UCM_long)
+
+Bobcat_icon <- makeIcon(
+  iconUrl = "Bobcat.png",
+  iconWidth = 32, iconHeight = 32
+)
+```
+
+```{r}
+leaflet() %>%
+  setView(lng = UCM_long, lat = UCM_lat, zoom = 11) %>%
+  
+  #https://leaflet-extras.github.io/leaflet-providers/preview/
+  addProviderTiles("Esri.NatGeoWorldMap") %>% 
+  addCircles(data = data_df,
+             radius = 1000,
+             color = "#002856",
+             fillColor = "#002856",
+             popup = paste0(
+               "<strong>UC Merced</strong>","<br>",
+               "<strong>Established: </strong>", "2005", "<br>",
+               "<strong>Lecturers: </strong>", "190"
+             ))
+  # addMarkers(lng = UCM_long, lat = UCM_lat, icon = Bobcat_icon)
+```
+

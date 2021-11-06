@@ -1,0 +1,53 @@
+---
+title: "Day 4"
+author: "Derek Sollberger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("rgeos") #for centroids
+library("sf") #handle shape files
+library("tidyverse")
+```
+
+```{r}
+# load shape file
+USA_hex_shp <- st_read("us_states_hexgrid/us_states_hexgrid.shp")
+
+# load demographics file
+HRC_LGBT_housing <- readxl::read_xlsx("HRC_-_LGBT_housing.xlsx")
+```
+
+```{r}
+# merge data
+USA_HRC_LGBT_housing <- USA_hex_shp %>%
+  left_join(HRC_LGBT_housing, by = c("iso3166_2" = "id"))
+```
+
+
+```{r}
+# Calculate the centroid of each hexagon to add the label
+# https://stackoverflow.com/questions/49343958/do-the-values-returned-by-rgeosgcentroid-and-sfst-centroid-differ
+centers <- data.frame(
+  st_coordinates(st_centroid(USA_hex_shp$geometry)), 
+  id=USA_hex_shp$iso3166_2)
+```
+
+
+```{r}
+USA_HRC_LGBT_housing %>%
+  ggplot() +
+  geom_sf(aes(fill = housing)) +
+  geom_text(data = centers, aes(x = X, y = Y, label = id)) +
+  labs(title = "Non-Discrimination in Housing",
+       subtitle = "(30 Day Map Challenge Day 4: Hexagons)",
+       caption = "Data Source: Human Rights Campaign (2020)",
+       x = "", y = "") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        legend.title = element_blank()) +
+  guides(fill = guide_legend(nrow = 4, byrow = TRUE))
+```
+

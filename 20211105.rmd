@@ -1,0 +1,45 @@
+---
+title: 'Day 5: OpenStreetMap'
+author: "Derek Sollberger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("ggmap") #easy to get background map
+library("osmdata")
+library("sf")
+library("tidyverse")
+```
+
+```{r}
+# get data
+merced_df_raw <- opq(bbox = getbb("Merced, CA")) %>%
+    add_osm_feature(key = 'amenity', value = 'restaurant') %>%
+    osmdata_sf ()
+
+merced_restaurants_raw <- merced_df_raw$osm_points
+merced_restaurants <- data.frame(
+  st_coordinates(st_centroid(merced_restaurants_raw$geometry)), 
+  id = merced_restaurants_raw$name)
+
+merced_road_shp <- st_read("Merced_County_Road_Centerlines/Road_Centerlines.shp")
+```
+
+```{r}
+merced_road_shp %>%
+  ggplot() +
+  geom_sf() +
+  geom_point(data = merced_restaurants,
+             aes(x = X, y = Y),
+             color = "red", size = 2) +
+  xlim(-120.52, -120.42) +
+  ylim(37.27, 37.38) +
+  labs(title = "Merced Restaurants",
+       subtitle = "30 Day Map Challenge Day 5: OpenStreetMap",
+       caption = "Data Source: OpenStreetMap",
+       x = "", y = "") +
+  theme_minimal()
+```
+

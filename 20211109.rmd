@@ -1,0 +1,63 @@
+---
+title: "Day 9"
+author: "Derek Sollberger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("roughsf") #https://github.com/schochastics/roughsf
+library("sf") #handle shape files
+library("tidyverse")
+```
+
+```{r}
+# load shape file
+CA_county_shp <- st_read("CA_Counties/CA_Counties_TIGER2016.shp")
+
+# add a numerical column (silly numbers for colors later)
+CA_county_shp <- CA_county_shp %>%
+  mutate(forColors = as.numeric(COUNTYFP))
+```
+
+```{r}
+Merced_county_shp <- CA_county_shp %>% filter(NAME == "Merced")
+
+# https://en.wikipedia.org/wiki/Merced_County,_California
+# Merced_lat <- -120.71
+# Merced_long <- 37.19
+```
+
+
+```{r}
+CA_county_shp %>%
+  ggplot() +
+  geom_sf() +
+  geom_sf(data = Merced_county_shp, fill = "green") +
+  theme(panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_text(color = "darkgreen", hjust = 0.5, size = 10),
+        plot.title = element_text(color = "darkgreen", hjust = 0.5, size = 15)) + 
+  scale_fill_gradient(low = "red", high = "green", name = "NDVI") +
+  labs(title = "30 Day Map Challenge",
+       subtitle = "Day 9: Monochrome",
+       caption = "Data Source: data.ca.gov\n
+       \'roughsf\' R package")
+```
+
+```{r}
+map_info <- st_cast(CA_county_shp, "POLYGON")
+map_info$color = "darkgreen"
+map_info$fill = "green"
+map_info$fillstyle = "cross-hatch"
+map_info$strokesize = 2
+
+roughsf::roughsf(map_info,
+  title = "30 Day Map Challenge, Day 9: Monochrome",
+  title_font = "30px TT Times New Roman",
+  caption = "Data Source: data.ca.gov",
+  caption_font = "12px TT Times New Roman",
+  roughness = 2, bowing = 5, simplification = 7)
+```
+

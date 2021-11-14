@@ -1,0 +1,125 @@
+---
+title: "Day 13"
+author: "Derek Sollberger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("raster")
+library("rgdal")
+library("sf")
+library("terra")
+library("tidyverse")
+```
+
+```{r}
+tif_raw <- terra::rast("US_MSR_10M/US_MSR.tif")
+```
+
+```{r}
+tif_downsampled <- terra::aggregate(tif_raw, fact = 20)
+```
+
+
+```{r}
+# usa_df <- tif_downsampled %>%
+#   projectRaster(crs = "+proj=longlat +datum=WGS84") %>%
+#   as("SpatialPixelsDataFrame") %>% 
+#   as.data.frame()
+
+# https://www.patrickbaylis.com/blog/2021-03-13-downsampling-magic/
+usa_df <- as.data.frame(tif_downsampled, xy = TRUE)
+```
+
+```{r}
+summary(usa_df$US_MSR)
+```
+
+```{r}
+quantile(usa_df$US_MSR, c(50, 60, 70, 80, 90, 100)/100)
+```
+
+```{r}
+# https://www.jdatalab.com/data_science_and_data_mining/2017/01/30/data-binning-plot.html
+# https://www.schemecolor.com/lgbt-flag-colors.php
+LGBT_flag_colors <- c("Vivid Red" = "#FF0018",
+                      "Deep Saffron"= "#FFA52C",
+                      "Maximum Yellow" = "#FFFF41",
+                      "Ao" = "#008018",
+                      "Blue" = "#0000F9",
+                      "Philippine Violet" = "#86007D")
+
+# usa_df <- usa_df %>%
+#   mutate(map_color = case_when(
+#     US_MSR >= 239 ~ "#86007D",
+#     US_MSR >= 230 & US_MSR < 239 ~ "#0000F9",
+#     US_MSR >= 221 & US_MSR < 239 ~ "#008018",
+#     US_MSR >= 212 & US_MSR < 221 ~ "#FFFF41",
+#     US_MSR >= 203 & US_MSR < 212 ~ "#FFA52C",
+#     TRUE ~ "#FF0018"
+#   ))
+# usa_df <- usa_df %>%
+#   mutate(map_color = case_when(
+#     US_MSR > 239 ~ "Vivid Red",
+#     US_MSR > 230 & US_MSR <= 239 ~ "Deep Saffron",
+#     US_MSR > 221 & US_MSR <= 239 ~ "Maximum Yellow",
+#     US_MSR > 212 & US_MSR <= 221 ~ "Ao",
+#     US_MSR > 203 & US_MSR <= 212 ~ "Blue",
+#     TRUE ~ "Philippine Violet"
+#   ))
+# usa_df <- usa_df %>%
+#   mutate(map_color = case_when(
+#     US_MSR > 235 ~ "Vivid Red",
+#     US_MSR > 227 & US_MSR <= 238 ~ "Deep Saffron",
+#     US_MSR > 219 & US_MSR <= 227 ~ "Maximum Yellow",
+#     US_MSR > 211 & US_MSR <= 219 ~ "Ao",
+#     US_MSR > 203 & US_MSR <= 211 ~ "Blue",
+#     TRUE ~ "Philippine Violet"
+#   ))
+# usa_df <- usa_df %>%
+#   mutate(map_color = case_when(
+#     US_MSR > 231 ~ "Vivid Red",
+#     US_MSR > 224 & US_MSR <= 231 ~ "Deep Saffron",
+#     US_MSR > 217 & US_MSR <= 224 ~ "Maximum Yellow",
+#     US_MSR > 210 & US_MSR <= 217 ~ "Ao",
+#     US_MSR > 203 & US_MSR <= 210 ~ "Blue",
+#     TRUE ~ "Philippine Violet"
+#   ))
+usa_df <- usa_df %>%
+  mutate(map_color = case_when(
+    US_MSR > 211 ~ "Vivid Red",
+    US_MSR > 209 & US_MSR <= 211 ~ "Deep Saffron",
+    US_MSR > 207 & US_MSR <= 209 ~ "Maximum Yellow",
+    US_MSR > 205 & US_MSR <= 207 ~ "Ao",
+    US_MSR > 203 & US_MSR <= 205 ~ "Blue",
+    TRUE ~ "Philippine Violet"
+  ))
+```
+
+```{r}
+usa_plot <- usa_df %>%
+  ggplot() +
+  geom_tile(aes(x = x, y = y, fill = map_color)) +
+  # geom_sf() +
+  # xlim(-120.55, -120.40) +
+  # ylim(37.27, 37.38) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        # legend.title = element_text("Color Scheme"),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.caption = element_text(size = 15),
+        plot.subtitle = element_text(color = "#FFA52C", hjust = 0.5, size = 20),
+        plot.title = element_text(color = "#FF0018", hjust = 0.5, size = 30)) + 
+  scale_fill_manual(name = "Color Scheme", values = LGBT_flag_colors) +
+  labs(title = "30 Day Map Challenge",
+       subtitle = "Day 13: Natural Earth",
+       caption = "Data Source: Natural Earth",
+       x = "", y = "")
+
+usa_plot
+```
+

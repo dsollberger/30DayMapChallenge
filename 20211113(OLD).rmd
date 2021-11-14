@@ -1,0 +1,41 @@
+---
+title: "Day 13"
+author: "Derek Sollberger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("terra")
+```
+
+```{r}
+# load data
+# https://www.naturalearthdata.com/downloads/10m-raster-data/10m-manual-shaded-relief/
+  
+tif_raw <- rast("US_MSR_10M/US_MSR.tif")
+```
+
+```{r}
+# basic plot
+plot(tif_raw)
+```
+
+```{r, eval = FALSE}
+# contour plot
+plot(tif_raw)
+lines(as.contour(tif_raw))
+```
+
+```{r}
+# creating a hill shade map?
+# https://rdrr.io/cran/terra/man/shade.html
+alt <- disagg(tif_raw, 10, method="bilinear")
+slope <- terrain(alt, "slope", unit="radians")
+aspect <- terrain(alt, "aspect", unit="radians")
+hill <- shade(slope, aspect, 40, 270)
+plot(hill, col=grey(0:100/100), legend=FALSE, mar=c(2,2,1,4))
+plot(alt, col=rainbow(25, alpha=0.35), add=TRUE)
+```
+

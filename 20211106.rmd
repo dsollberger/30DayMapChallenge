@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library("raster")
 library("rgdal")
 library("sf")
+library("terra")
 library("tidyverse")
 ```
 
@@ -17,17 +18,23 @@ library("tidyverse")
 # load data
 band4 <- raster("Merced20211008/LC08_CU_002009_20211008_20211022_02_TOA_B4.tif")
 band5 <- raster("Merced20211008/LC08_CU_002009_20211008_20211022_02_TOA_B5.tif")
+merced_road_shp <- st_read("Merced_County_Road_Centerlines/Road_Centerlines.shp")
 ```
 
 ```{r}
 NDVI <- (band5 - band4) / (band5 + band4)
+NDVI_downsampled <- terra::aggregate(NDVI, fact = 5)
 ```
 
 ```{r}
-NDVI_df <- NDVI %>%
+NDVI_df <- NDVI_downsampled %>%
   projectRaster(crs = "+proj=longlat +datum=WGS84") %>%
   as("SpatialPixelsDataFrame") %>% 
   as.data.frame()
+# road_df <- merced_road_shp %>%
+#   projectRaster(crs = "+proj=longlat +datum=WGS84") %>%
+#   as("SpatialLinesDataFrame") %>% 
+#   as.data.frame()
 ```
 
 ```{r}
@@ -35,7 +42,8 @@ Merced_NDVI_df <- NDVI_df %>%
   filter(x > -120.55) %>%
   filter(x < -120.40) %>%
   filter(y > 37.27) %>%
-  filter(y < 37.38)
+  filter(y < 37.38) %>%
+  mutate(divide = ifelse(layer > 0.14, "rural", "urban"))
 ```
 
 ```{r}
@@ -46,14 +54,17 @@ summary(Merced_NDVI_df$layer)
 ```{r}
 Merced_NDVI_df %>%
   ggplot() +
-  geom_tile(aes(x = x, y = y, fill = layer)) +
+  geom_tile(aes(x = x, y = y, fill = divide)) +
+  geom_sf(data = merced_road_shp) +
+  xlim(-120.55, -120.40) +
+  ylim(37.27, 37.38) +
   theme(panel.background = element_blank(),
         panel.grid.minor = element_blank(),
         plot.subtitle = element_text(color = "red", hjust = 0.5),
         plot.title = element_text(color = "darkgreen", hjust = 0.5)) + 
-  scale_fill_gradient(low = "red", high = "green", name = "NDVI") +
-  labs(title = "Normalized Difference Vegetation Index for Merced, CA",
-       subtitle = "30 Day Map Challenge Days 6 and 7: Red and Green",
+  # scale_fill_gradient(low = "red", high = "green", name = "NDVI") +
+  labs(title = "Literally Applied a Math Inequality on NDVI",
+       subtitle = "30 Day Map Challenge Day 16: Urban/Rural",
        caption = "USGS LandSat8 Data",
        x = "", y = "")
 ```

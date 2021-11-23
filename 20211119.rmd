@@ -1,0 +1,112 @@
+---
+title: "Day 19"
+author: "Derek Sollberger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("OpenImageR")
+library("SuperpixelImageSegmentation")
+library("tidyverse")
+```
+
+```{r}
+# https://cran.r-project.org/web/packages/OpenImageR/vignettes/Image_segmentation_superpixels_clustering.html
+im <- readImage("Myst_Map.jpg")
+```
+
+```{r}
+res_slic <- superpixels(im,
+                        method = "slic",
+                        superpixel = 200,
+                        compactness = 20,
+                        return_slic_data = TRUE,
+                        return_lab_data = TRUE,
+                        return_labels = TRUE,
+                        write_slic = "",
+                        verbose = FALSE
+)
+```
+
+```{r}
+plot_slic <- grDevices::as.raster(OpenImageR::NormalizeObject(res_slic$slic_data))
+```
+
+```{r}
+plot(plot_slic)
+```
+
+===
+
+```{r}
+init = Image_Segmentation$new()
+
+spx = init$spixel_segmentation(input_image = im, 
+                               superpixel = 600, 
+                               AP_data = TRUE,
+                               use_median = TRUE, 
+                               sim_wL = 3, 
+                               sim_wA = 10, 
+                               sim_wB = 10,
+                               sim_color_radius = 10, 
+                               verbose = TRUE)
+```
+
+```{r}
+OpenImageR::imageShow(spx$AP_image_data)
+```
+
+```{r}
+spx_masks = init$spixel_segmentation(input_image = im, 
+                                     superpixel = 600, 
+                                     AP_data = TRUE,
+                                     use_median = TRUE, 
+                                     sim_wL = 3, 
+                                     sim_wA = 10, 
+                                     sim_wB = 10,
+                                     sim_color_radius = 10, 
+                                     kmeans_method = "kmeans",
+                                     kmeans_initializer = "kmeans++",
+                                     adjust_centroids_and_return_masks = TRUE,
+                                     verbose = TRUE)
+```
+```{r}
+myst_df <- as.data.frame.table(spx_masks$KMeans_image_data[,,1],
+                               responseName = "cluster") %>%
+  mutate_if(is.factor, as.integer)
+myst_df$cluster_factor <- factor(myst_df$cluster,
+                                 levels = 0:6,
+                                 labels = c("shallow water",
+                                            "earth",
+                                            "deep water",
+                                            "grass",
+                                            "text",
+                                            "mountain",
+                                            "cement"))
+```
+
+```{r}
+myst_df %>%
+  ggplot(aes(x = Var2, y = -Var1, color = cluster_factor)) +
+  geom_point() +
+  scale_color_manual(name = "Type",
+                     values = c("lightblue", "brown", "darkblue", 
+                                "green", "black" , "white", "gray")) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        # legend.position = "none",
+        # legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_text(color = "blue", hjust = 0.5, size = 15),
+        plot.title = element_text(color = "black", hjust = 0.5, size = 20)) +
+  guides(colour = guide_legend(override.aes = list(size=10))) +
+  labs(title = "Image Segmentation of Myst",
+       subtitle = "30 Day Map Challenge, Day 19: Island",
+       caption = "Image Source: https://dni.fandom.com/wiki/Myst_Island",
+       x = "", y = "")
+```
+

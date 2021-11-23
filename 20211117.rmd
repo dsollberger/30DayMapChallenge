@@ -1,0 +1,49 @@
+---
+title: "Day 17"
+author: "Derek Sollberger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("sf") #handle shape files
+library("tidyverse")
+```
+
+```{r}
+# load shape file
+# https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/
+countries_shp <- st_read("ne_50m_admin_0_countries/ne_50m_admin_0_countries.shp")
+
+# load data file
+german_name_df <- readxl::read_xlsx("German_countries.xlsx")
+```
+
+```{r}
+german_land_shp <- countries_shp %>%
+  inner_join(german_name_df, by = c("NAME" = "ENGLISH"))
+```
+
+
+```{r}
+# https://www.schemecolor.com/germany-flag-colors.php
+countries_shp %>%
+  ggplot() +
+  geom_sf() +
+  geom_sf(data = german_land_shp, 
+          aes(fill = DEUTSCH),
+          color = "black") +
+  xlim(-25, 180) +
+  theme(legend.position = "right",
+        legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_text(color = "#dd0000", hjust = 0.5, size = 15),
+        plot.title = element_text(color = "black", hjust = 0.5, size = 20)) + 
+  # scale_fill_manual(values=cbbPalette) +
+  labs(title = "Länder mit '-land'",
+       subtitle = "30 Tage Kartenherausforderung, Tag 17: Land",
+       caption = "Data Source: Natural Earth")
+```
+

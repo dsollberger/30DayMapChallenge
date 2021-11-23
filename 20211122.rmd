@@ -1,0 +1,100 @@
+---
+title: "Day 22"
+author: "Derek Sollberger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("patchwork")
+library("sf")
+library("tidyverse")
+```
+
+```{r}
+# load shape files
+NA_shp2017 <- st_read("tl_2017_us_aitsn/tl_2017_us_aitsn.shp")
+NA_shp2018 <- st_read("cb_2018_us_aiannh_500k/cb_2018_us_aiannh_500k.shp")
+states_shp <- st_read("cb_2018_us_state_5m/cb_2018_us_state_5m.shp")
+```
+
+```{r}
+continental_usa <- states_shp %>%
+  ggplot() +
+  geom_sf() +
+  geom_sf(data = NA_shp2018, fill = "darkgreen") +
+  xlim(-125, -65) +
+  ylim(25, 50) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_blank(),
+        plot.title = element_blank())
+```
+
+```{r}
+alaska <- states_shp %>%
+  ggplot() +
+  geom_sf() +
+  geom_sf(data = NA_shp2018, fill = "darkgreen") +
+  xlim(-170, -130) +
+  ylim(53, 72) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_blank(),
+        plot.title = element_blank())
+```
+
+```{r}
+hawaii <- states_shp %>%
+  ggplot() +
+  geom_sf() +
+  geom_sf(data = NA_shp2018, fill = "darkgreen") +
+  xlim(-160, -155) +
+  ylim(19, 23) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_blank(),
+        plot.title = element_blank())
+```
+
+```{r}
+california <- states_shp %>%
+  ggplot() +
+  geom_sf() +
+  geom_sf(data = NA_shp2018, fill = "darkgreen") +
+  xlim(-124, -114) +
+  ylim(33, 42) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_blank(),
+        plot.title = element_blank())
+```
+
+```{r}
+(alaska + continental_usa) / (hawaii + california) +
+  plot_annotation(title = "Native American Lands",
+                  subtitle = "30 Day Map Challenge, Day 22: Boundaries",
+                  caption = "Data Source: Census.gov")
+```
+

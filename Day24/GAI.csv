@@ -1,0 +1,705 @@
+country,gai,year
+Afghanistan,4.8,2003
+Afghanistan,5.1,2008
+Afghanistan,3.6,2013
+Afghanistan,2.7,2017
+Albania,4,2003
+Albania,4.3,2008
+Albania,3.4,2013
+Albania,3.5,2017
+Algeria,4,2003
+Algeria,4.3,2008
+Algeria,4.1,2013
+Algeria,4.1,2017
+Andorra,5.1,2003
+Andorra,5.8,2008
+Andorra,4.9,2013
+Andorra,4.9,2017
+Angola,4.3,2003
+Angola,4.6,2008
+Angola,4.1,2013
+Angola,3.7,2017
+Antigua and Barb.,4.4,2003
+Antigua and Barb.,4.5,2008
+Antigua and Barb.,3.9,2013
+Antigua and Barb.,3.9,2017
+Argentina,5.8,2003
+Argentina,6,2008
+Argentina,6.6,2013
+Argentina,6.9,2017
+Armenia,4.1,2003
+Armenia,4.2,2008
+Armenia,2.5,2013
+Armenia,2.2,2017
+Australia,5.9,2003
+Australia,6.5,2008
+Australia,7,2013
+Australia,7.3,2017
+Austria,5.8,2003
+Austria,5.9,2008
+Austria,6,2013
+Austria,6.8,2017
+Azerbaijan,3.7,2003
+Azerbaijan,3.5,2008
+Azerbaijan,2.4,2013
+Azerbaijan,1.7,2017
+Bahamas,4.5,2003
+Bahamas,4.7,2008
+Bahamas,4.2,2013
+Bahamas,4.4,2017
+Bahrain,5,2003
+Bahrain,5.2,2008
+Bahrain,5.2,2013
+Bahrain,5.5,2017
+Bangladesh,3.7,2003
+Bangladesh,4.1,2008
+Bangladesh,3.7,2013
+Bangladesh,4.8,2017
+Barbados,4.7,2003
+Barbados,4.9,2008
+Barbados,4.6,2013
+Barbados,4.8,2017
+Belarus,4.6,2003
+Belarus,4.5,2008
+Belarus,3.6,2013
+Belarus,3.5,2017
+Belgium,6,2003
+Belgium,6.5,2008
+Belgium,7.2,2013
+Belgium,7.9,2017
+Belize,4.6,2003
+Belize,4.9,2008
+Belize,4.9,2013
+Belize,4.3,2017
+Benin,4.4,2003
+Benin,4.4,2008
+Benin,2.7,2013
+Benin,3.6,2017
+Bhutan,4.1,2003
+Bhutan,4.5,2008
+Bhutan,3.9,2013
+Bhutan,4.1,2017
+Bolivia,5.2,2003
+Bolivia,5.2,2008
+Bolivia,5,2013
+Bolivia,5.4,2017
+Bosnia and Herz.,4.4,2003
+Bosnia and Herz.,4.4,2008
+Bosnia and Herz.,3.7,2013
+Bosnia and Herz.,3.1,2017
+Botswana,4.8,2003
+Botswana,5.1,2008
+Botswana,4.5,2013
+Botswana,4.5,2017
+Brazil,5.5,2003
+Brazil,5.8,2008
+Brazil,6.4,2013
+Brazil,6.8,2017
+Bulgaria,5,2003
+Bulgaria,5.1,2008
+Bulgaria,4.9,2013
+Bulgaria,4.6,2017
+Burkina Faso,4,2003
+Burkina Faso,4,2008
+Burkina Faso,2.6,2013
+Burkina Faso,3,2017
+Burundi,3.8,2003
+Burundi,3.9,2008
+Burundi,2.4,2013
+Burundi,2.7,2017
+Cambodia,4.4,2003
+Cambodia,4.5,2008
+Cambodia,4.7,2013
+Cambodia,4.8,2017
+Cameroon,3.9,2003
+Cameroon,3.8,2008
+Cameroon,3.1,2013
+Cameroon,2.9,2017
+Canada,5.9,2003
+Canada,6.5,2008
+Canada,7.4,2013
+Canada,8.2,2017
+Cape Verde,5.1,2003
+Cape Verde,5.5,2008
+Cape Verde,5.9,2013
+Cape Verde,6.8,2017
+Central African Rep.,3.9,2003
+Central African Rep.,3.9,2008
+Central African Rep.,3.1,2013
+Central African Rep.,2.8,2017
+Chad,4.2,2003
+Chad,4.2,2008
+Chad,2.9,2013
+Chad,2.8,2017
+Chile,5.5,2003
+Chile,5.8,2008
+Chile,6.1,2013
+Chile,6.7,2017
+China,4.4,2003
+China,4.4,2008
+China,3.8,2013
+China,3.9,2017
+Colombia,5.1,2003
+Colombia,5.5,2008
+Colombia,5.7,2013
+Colombia,5.9,2017
+Comoros,3.8,2003
+Comoros,3.9,2008
+Comoros,2.9,2013
+Comoros,3,2017
+Costa Rica,4.9,2003
+Costa Rica,5.6,2008
+Costa Rica,6,2013
+Costa Rica,6.1,2017
+Côte d'Ivoire,3.8,2003
+Côte d'Ivoire,3.6,2008
+Côte d'Ivoire,2.4,2013
+Côte d'Ivoire,3.1,2017
+Croatia,4.9,2003
+Croatia,4.8,2008
+Croatia,4.6,2013
+Croatia,5.2,2017
+Cuba,5.5,2003
+Cuba,6,2008
+Cuba,6,2013
+Cuba,6.1,2017
+Cyprus,5,2003
+Cyprus,5.1,2008
+Cyprus,5.3,2013
+Cyprus,5.1,2017
+Czechia,5.8,2003
+Czechia,5.8,2008
+Czechia,5.7,2013
+Czechia,6,2017
+Dem. Rep. Congo,3.9,2003
+Dem. Rep. Congo,3.9,2008
+Dem. Rep. Congo,3,2013
+Dem. Rep. Congo,3.4,2017
+Denmark,6.7,2003
+Denmark,6.5,2008
+Denmark,7.2,2013
+Denmark,7.9,2017
+Djibouti,3.8,2003
+Djibouti,3.7,2008
+Djibouti,2.7,2013
+Djibouti,2.8,2017
+Dominica,4.5,2003
+Dominica,4.6,2008
+Dominica,4,2013
+Dominica,4.1,2017
+Dominican Rep.,5.3,2003
+Dominican Rep.,5.3,2008
+Dominican Rep.,5.1,2013
+Dominican Rep.,5.2,2017
+Ecuador,4.9,2003
+Ecuador,5.5,2008
+Ecuador,5.4,2013
+Ecuador,5.6,2017
+Egypt,2.2,2003
+Egypt,2.9,2008
+Egypt,2.1,2013
+Egypt,2.2,2017
+El Salvador,4.6,2003
+El Salvador,5.2,2008
+El Salvador,5.1,2013
+El Salvador,5.3,2017
+Estonia,4.7,2003
+Estonia,5,2008
+Estonia,4.7,2013
+Estonia,4.9,2017
+Ethiopia,3.8,2003
+Ethiopia,3.8,2008
+Ethiopia,2.4,2013
+Ethiopia,2.1,2017
+Finland,5.7,2003
+Finland,6,2008
+Finland,6.6,2013
+Finland,7.4,2017
+France,6,2003
+France,6.4,2008
+France,6.9,2013
+France,7.1,2017
+Gabon,4.2,2003
+Gabon,4.1,2008
+Gabon,3.1,2013
+Gabon,3.1,2017
+Gambia,4.3,2003
+Gambia,4.3,2008
+Gambia,3.5,2013
+Gambia,3.4,2017
+Georgia,4.1,2003
+Georgia,3.8,2008
+Georgia,2.7,2013
+Georgia,2.7,2017
+Germany,5.9,2003
+Germany,6.2,2008
+Germany,6.8,2013
+Germany,7.4,2017
+Ghana,3.9,2003
+Ghana,4,2008
+Ghana,2.7,2013
+Ghana,3,2017
+Greece,5.3,2003
+Greece,5.3,2008
+Greece,5,2013
+Greece,5,2017
+Grenada,4.6,2003
+Grenada,4.7,2008
+Grenada,4.3,2013
+Grenada,4.5,2017
+Guatemala,5.2,2003
+Guatemala,5.2,2008
+Guatemala,4.8,2013
+Guatemala,4.8,2017
+Guinea,4,2003
+Guinea,4,2008
+Guinea,2.8,2013
+Guinea,2.7,2017
+Guyana,4.7,2003
+Guyana,4.8,2008
+Guyana,4.5,2013
+Guyana,4.7,2017
+Haiti,4.2,2003
+Haiti,4.5,2008
+Haiti,3.6,2013
+Haiti,3.6,2017
+Honduras,4.9,2003
+Honduras,4.9,2008
+Honduras,4.9,2013
+Honduras,5.2,2017
+Hong Kong,5.4,2003
+Hong Kong,5.8,2008
+Hong Kong,6.1,2013
+Hong Kong,6.5,2017
+Hungary,4.6,2003
+Hungary,5.2,2008
+Hungary,4.9,2013
+Hungary,4.9,2017
+Iceland,6.3,2003
+Iceland,7.1,2008
+Iceland,8.4,2013
+Iceland,8.9,2017
+India,5.1,2003
+India,4.7,2008
+India,4.2,2013
+India,4.5,2017
+Indonesia,3.6,2003
+Indonesia,3.5,2008
+Indonesia,2.3,2013
+Indonesia,2.8,2017
+Iran,4.1,2003
+Iran,3.5,2008
+Iran,2.3,2013
+Iran,2.4,2017
+Iraq,4.3,2003
+Iraq,4.5,2008
+Iraq,3.3,2013
+Iraq,3.1,2017
+Ireland,5.7,2003
+Ireland,6.3,2008
+Ireland,7,2013
+Ireland,7.9,2017
+Israel,6.1,2003
+Israel,5.4,2008
+Israel,5.5,2013
+Israel,5.4,2017
+Italy,5.6,2003
+Italy,5.8,2008
+Italy,6.1,2013
+Italy,6.4,2017
+Jamaica,4.6,2003
+Jamaica,4.6,2008
+Jamaica,3.9,2013
+Jamaica,4.1,2017
+Japan,5.3,2003
+Japan,5.3,2008
+Japan,5.4,2013
+Japan,4.9,2017
+Jordan,3.7,2003
+Jordan,3.5,2008
+Jordan,2.6,2013
+Jordan,3.5,2017
+Kazakhstan,4.2,2003
+Kazakhstan,4.1,2008
+Kazakhstan,3.3,2013
+Kazakhstan,3.1,2017
+Kenya,3.4,2003
+Kenya,3.6,2008
+Kenya,3.2,2013
+Kenya,3.4,2017
+Kosovo,3.5,2003
+Kosovo,3.9,2008
+Kosovo,3.3,2013
+Kosovo,2.9,2017
+Kuwait,4.2,2003
+Kuwait,4,2008
+Kuwait,3.3,2013
+Kuwait,3.5,2017
+Kyrgyzstan,4,2003
+Kyrgyzstan,3.7,2008
+Kyrgyzstan,2.8,2013
+Kyrgyzstan,3,2017
+Laos,4.8,2003
+Laos,5.3,2008
+Laos,5.4,2013
+Laos,5.4,2017
+Latvia,5,2003
+Latvia,5.2,2008
+Latvia,4.3,2013
+Latvia,4.4,2017
+Lebanon,4.7,2003
+Lebanon,4.6,2008
+Lebanon,3.6,2013
+Lebanon,4.1,2017
+Lesotho,4.4,2003
+Lesotho,4.6,2008
+Lesotho,4,2013
+Lesotho,3.9,2017
+Liberia,4.1,2003
+Liberia,4.2,2008
+Liberia,3.6,2013
+Liberia,2.7,2017
+Libya,4.3,2003
+Libya,4.4,2008
+Libya,3.6,2013
+Libya,3.6,2017
+Lithuania,4.4,2003
+Lithuania,4.6,2008
+Lithuania,4.2,2013
+Lithuania,4.1,2017
+Luxembourg,6.1,2003
+Luxembourg,6.4,2008
+Luxembourg,6.6,2013
+Luxembourg,7.7,2017
+Macedonia,4.7,2003
+Macedonia,4.6,2008
+Macedonia,3.8,2013
+Macedonia,3,2017
+Madagascar,3.9,2003
+Madagascar,4,2008
+Madagascar,3.4,2013
+Madagascar,3.2,2017
+Malawi,4,2003
+Malawi,3.9,2008
+Malawi,2.7,2013
+Malawi,2.3,2017
+Malaysia,4.4,2003
+Malaysia,3.9,2008
+Malaysia,3.1,2013
+Malaysia,4.2,2017
+Mali,4.3,2003
+Mali,4.2,2008
+Mali,2.5,2013
+Mali,2.7,2017
+Malta,5.2,2003
+Malta,5.6,2008
+Malta,6.7,2013
+Malta,7.6,2017
+Mauritania,4.2,2003
+Mauritania,4.2,2008
+Mauritania,3,2013
+Mauritania,2.6,2017
+Mauritius,4.8,2003
+Mauritius,4.9,2008
+Mauritius,4.6,2013
+Mauritius,5.3,2017
+Mexico,5.4,2003
+Mexico,5.9,2008
+Mexico,5.8,2013
+Mexico,6.3,2017
+Moldova,4.1,2003
+Moldova,4,2008
+Moldova,3.1,2013
+Moldova,2.7,2017
+Mongolia,4.4,2003
+Mongolia,4.5,2008
+Mongolia,3.6,2013
+Mongolia,3,2017
+Montenegro,4.4,2003
+Montenegro,4.5,2008
+Montenegro,4,2013
+Montenegro,3.6,2017
+Morocco,3.7,2003
+Morocco,3.8,2008
+Morocco,2.9,2013
+Morocco,3.4,2017
+Mozambique,4.2,2003
+Mozambique,4.6,2008
+Mozambique,5.2,2013
+Mozambique,5,2017
+Myanmar,4.6,2003
+Myanmar,5,2008
+Myanmar,4.8,2013
+Myanmar,4.8,2017
+NA,NA,2003
+NA,NA,2003
+NA,NA,2008
+NA,NA,2008
+NA,NA,2013
+NA,NA,2013
+NA,NA,2017
+NA,NA,2017
+Nagorno- Karabakh,3.3,2003
+Nagorno- Karabakh,3.5,2008
+Nagorno- Karabakh,2.2,2013
+Nagorno- Karabakh,2.2,2017
+Namibia,4.6,2003
+Namibia,4.7,2008
+Namibia,4.6,2013
+Namibia,5.2,2017
+Nepal,4.8,2003
+Nepal,5.1,2008
+Nepal,5.4,2013
+Nepal,7.8,2017
+Netherlands,6.8,2003
+Netherlands,7.2,2008
+Netherlands,7.9,2013
+Netherlands,8.6,2017
+New Zealand,5.9,2003
+New Zealand,6.4,2008
+New Zealand,7,2013
+New Zealand,7.5,2017
+Nicaragua,5.1,2003
+Nicaragua,5.6,2008
+Nicaragua,5.8,2013
+Nicaragua,5.6,2017
+Niger,3.9,2003
+Niger,3.9,2008
+Niger,2.2,2013
+Niger,2.8,2017
+Nigeria,4.2,2003
+Nigeria,4.3,2008
+Nigeria,3,2013
+Nigeria,2.9,2017
+N. Cyprus,4.2,2003
+N. Cyprus,4.8,2008
+N. Cyprus,4.4,2013
+N. Cyprus,5.3,2017
+Norway,6.2,2003
+Norway,6.5,2008
+Norway,7.3,2013
+Norway,8.2,2017
+Pakistan,3.8,2003
+Pakistan,4.8,2008
+Pakistan,4.1,2013
+Pakistan,2.4,2017
+Palestine,3.9,2003
+Palestine,4.1,2008
+Palestine,3.2,2013
+Palestine,3.2,2017
+Panama,5,2003
+Panama,5.4,2008
+Panama,5.6,2013
+Panama,5.3,2017
+Paraguay,4.9,2003
+Paraguay,5.2,2008
+Paraguay,5.6,2013
+Paraguay,5.2,2017
+Peru,5.2,2003
+Peru,5.3,2008
+Peru,5,2013
+Peru,5.3,2017
+Philippines,5.5,2003
+Philippines,5.7,2008
+Philippines,6.1,2013
+Philippines,6.6,2017
+Poland,5,2003
+Poland,4.9,2008
+Poland,4.8,2013
+Poland,4.8,2017
+Portugal,5.5,2003
+Portugal,5.6,2008
+Portugal,6,2013
+Portugal,6.4,2017
+Puerto Rico,4.9,2003
+Puerto Rico,5.9,2008
+Puerto Rico,6.7,2013
+Puerto Rico,7.4,2017
+Qatar,4.2,2003
+Qatar,4,2008
+Qatar,3,2013
+Qatar,3.2,2017
+Congo,4,2003
+Congo,4,2008
+Congo,3.3,2013
+Congo,3.1,2017
+Romania,4.4,2003
+Romania,4.4,2008
+Romania,4.3,2013
+Romania,4.1,2017
+Russia,4.7,2003
+Russia,4.5,2008
+Russia,3.8,2013
+Russia,3.4,2017
+Rwanda,4.2,2003
+Rwanda,4.3,2008
+Rwanda,2.3,2013
+Rwanda,2.9,2017
+St. Kitts and Nevis,4.4,2003
+St. Kitts and Nevis,4.6,2008
+St. Kitts and Nevis,4.1,2013
+St. Kitts and Nevis,4.2,2017
+Saint Lucia,4.5,2003
+Saint Lucia,4.6,2008
+Saint Lucia,4,2013
+Saint Lucia,4.1,2017
+St. Vin. and Gren.,4.2,2003
+St. Vin. and Gren.,4.3,2008
+St. Vin. and Gren.,3.6,2013
+St. Vin. and Gren.,3.5,2017
+São Tomé and Principe,4.5,2003
+São Tomé and Principe,4.8,2008
+São Tomé and Principe,4.5,2013
+São Tomé and Principe,4.8,2017
+Saudi Arabia,3.7,2003
+Saudi Arabia,3.6,2008
+Saudi Arabia,2.8,2013
+Saudi Arabia,3,2017
+Senegal,3.8,2003
+Senegal,3.5,2008
+Senegal,2.5,2013
+Senegal,1.7,2017
+Serbia,4.8,2003
+Serbia,4.7,2008
+Serbia,4.2,2013
+Serbia,4.2,2017
+Sierra Leone,4.2,2003
+Sierra Leone,4.3,2008
+Sierra Leone,3,2013
+Sierra Leone,3.1,2017
+Singapore,4.8,2003
+Singapore,5.2,2008
+Singapore,5.1,2013
+Singapore,4.8,2017
+Slovakia,5.6,2003
+Slovakia,5.4,2008
+Slovakia,4.9,2013
+Slovakia,5,2017
+Slovenia,5.3,2003
+Slovenia,5.4,2008
+Slovenia,5.5,2013
+Slovenia,5.9,2017
+Somaliland,3.1,2003
+Somaliland,3.2,2008
+Somaliland,1.8,2013
+Somaliland,1.8,2017
+South Africa,5.1,2003
+South Africa,5.1,2008
+South Africa,5.7,2013
+South Africa,6.2,2017
+South Korea,4.4,2003
+South Korea,4.1,2008
+South Korea,4.2,2013
+South Korea,4.9,2017
+S. Sudan,3.5,2003
+S. Sudan,3.8,2008
+S. Sudan,2.7,2013
+S. Sudan,2.6,2017
+Spain,6,2003
+Spain,6.5,2008
+Spain,7.4,2013
+Spain,8.1,2017
+Sri Lanka,4.1,2003
+Sri Lanka,3.9,2008
+Sri Lanka,2.9,2013
+Sri Lanka,2.4,2017
+Sudan,4.2,2003
+Sudan,4.4,2008
+Sudan,3.2,2013
+Sudan,3.1,2017
+Suriname,4.9,2003
+Suriname,5.4,2008
+Suriname,5.5,2013
+Suriname,5.4,2017
+Swaziland,4.5,2003
+Swaziland,4.6,2008
+Swaziland,4.1,2013
+Swaziland,4,2017
+Sweden,6.7,2003
+Sweden,7.1,2008
+Sweden,7.4,2013
+Sweden,7.9,2017
+Switzerland,6.2,2003
+Switzerland,6.5,2008
+Switzerland,6.9,2013
+Switzerland,7.4,2017
+Syria,4.4,2003
+Syria,4.5,2008
+Syria,4.8,2013
+Syria,5.4,2017
+Taiwan,4.4,2003
+Taiwan,5,2008
+Taiwan,5.3,2013
+Taiwan,5.7,2017
+Tajikistan,3.4,2003
+Tajikistan,3.1,2008
+Tajikistan,1.6,2013
+Tajikistan,1.6,2017
+Tanzania,4.1,2003
+Tanzania,4,2008
+Tanzania,3.7,2013
+Tanzania,3.2,2017
+Thailand,5.1,2003
+Thailand,5.2,2008
+Thailand,4.4,2013
+Thailand,5.1,2017
+Togo,4,2003
+Togo,3.8,2008
+Togo,2.9,2013
+Togo,3,2017
+Trinidad and Tobago,4.6,2003
+Trinidad and Tobago,4.8,2008
+Trinidad and Tobago,5.1,2013
+Trinidad and Tobago,4.7,2017
+Tunisia,4.2,2003
+Tunisia,4,2008
+Tunisia,3.1,2013
+Tunisia,3.5,2017
+Turkey,4.2,2003
+Turkey,4.2,2008
+Turkey,3.7,2013
+Turkey,4.4,2017
+Uganda,4,2003
+Uganda,3.7,2008
+Uganda,2.7,2013
+Uganda,3.5,2017
+Ukraine,4.5,2003
+Ukraine,4.5,2008
+Ukraine,3.8,2013
+Ukraine,3.3,2017
+United Kingdom,5.7,2003
+United Kingdom,6.2,2008
+United Kingdom,7,2013
+United Kingdom,7.7,2017
+United States of America,5.5,2003
+United States of America,5.9,2008
+United States of America,6.6,2013
+United States of America,7.2,2017
+Uruguay,5.8,2003
+Uruguay,6.6,2008
+Uruguay,7.1,2013
+Uruguay,7.6,2017
+Uzbekistan,4.3,2003
+Uzbekistan,4,2008
+Uzbekistan,3.4,2013
+Uzbekistan,3.6,2017
+Venezuela,5,2003
+Venezuela,5.6,2008
+Venezuela,5.5,2013
+Venezuela,5.7,2017
+Vietnam,4.8,2003
+Vietnam,4.7,2008
+Vietnam,4.2,2013
+Vietnam,4.6,2017
+Yemen,4.3,2003
+Yemen,4.4,2008
+Yemen,3.7,2013
+Yemen,3.7,2017
+Zambia,4.1,2003
+Zambia,4.1,2008
+Zambia,3.2,2013
+Zambia,2.9,2017
+Zimbabwe,4.3,2003
+Zimbabwe,3.8,2008
+Zimbabwe,3,2013
+Zimbabwe,2.8,2017

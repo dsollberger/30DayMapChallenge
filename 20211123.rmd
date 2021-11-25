@@ -1,0 +1,95 @@
+---
+title: "Day 23"
+author: "Derek Sollberger"
+date: "11/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("patchwork")
+library("scales")
+library("sf")
+# library("sp")
+library("tidyverse")
+```
+
+```{r}
+# load data file
+GHSL_raw <- read_csv("GHS_STAT_UCDB2015MT_GLOBE_R2019A/GHS_STAT_UCDB2015MT_GLOBE_R2019A_V1_2.csv")
+
+# load shape file
+CA_county_shp <- st_read("CA_Counties/CA_Counties_TIGER2016.shp")
+# %>% sf::st_transform(crs = 4326)
+```
+
+```{r}
+# subset data down to California and transportation pollution
+GHSL_CA <- GHSL_raw %>%
+  filter(CTR_MN_ISO == "USA") %>%
+  filter(GCPNT_LAT > 33 & GCPNT_LAT < 42) %>%
+  filter(GCPNT_LON > -124 & GCPNT_LON < -114) %>%
+  select(GCPNT_LAT, GCPNT_LON, UC_NM_MN, P15, E_EC2E_T15, E_EPM2_T15)
+colnames(GHSL_CA) <- c("lat", "lon", "city", "pop", "CO2", "PM25")
+GHSL_sf <- GHSL_CA %>% 
+  sf::st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
+  sf::st_transform(crs = 4326)
+
+# GHSL_spdf <- SpatialPointsDataFrame(coords = GHSL_CA[,c("lat", "lon")],
+#                                     data = GHSL_CA,
+#                                     proj4string = CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"))
+```
+
+```{r}
+plot_CO2 <- CA_county_shp %>%
+  ggplot() +
+  geom_sf(color = "gray50", fill = "white") +
+  geom_sf(aes(color = CO2, size = pop), data = GHSL_sf) +
+  scale_color_gradient(name = "carbon dioxide\n(tonnes per year)", 
+                       low = "green", high = "red",
+                       labels = comma) +
+  guides(size = "none") +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = c(0.80, 0.75),
+        # legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_text(color = "black", hjust = 0.5, size = 10),
+        plot.title = element_text(color = "black", hjust = 0.5, size = 20)) + 
+  labs(title = "Carbon Dioxide (CO2)",
+       subtitle = "total emission of CO2 from the transport sector\nusing non-short-cycle-organic fuels in 2015",
+       caption = "",
+       x = "", y = "")
+```
+```{r}
+plot_PM25 <- CA_county_shp %>%
+  ggplot() +
+  geom_sf(color = "gray50", fill = "white") +
+  geom_sf(aes(color = PM25, size = pop), data = GHSL_sf) +
+  scale_color_gradient(name = "particulate matter\n(tonnes per year)", 
+                       low = "green", high = "red",
+                       labels = comma) +
+  guides(size = "none") +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = c(0.80, 0.75),
+        # legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_text(color = "black", hjust = 0.5, size = 10),
+        plot.title = element_text(color = "black", hjust = 0.5, size = 20)) + 
+  labs(title = "Particulate Matter (PM 2.5)",
+       subtitle = "total emission of particulate matter from the transport sector\nusing non-short-cycle-organic fuels in 2015",
+       caption = "",
+       x = "", y = "")
+```
+
+```{r}
+plot_CO2 + plot_PM25 +
+  plot_annotation(title = "30 Day Map Challenge, Day 23: GHSL",
+                  caption = "Data Source: GHSL")
+```
+

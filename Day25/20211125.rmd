@@ -1,0 +1,94 @@
+---
+title: "Day 25"
+author: "Derek Sollberger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library("sf") #handle shape files
+library("tidyverse")
+```
+
+```{r}
+# load shape file
+# https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/
+countries_shp <- st_read("../ne_50m_admin_0_countries/ne_50m_admin_0_countries.shp")
+
+# load data file
+South_America_capitals <- readxl::read_xlsx("South_America_capitals.xlsx")
+
+# combine files (inner join!)
+df <- countries_shp %>%
+  inner_join(South_America_capitals,
+             by = c("NAME" = "country")) %>%
+  arrange(NAME)
+N <- nrow(df)
+```
+
+```{r}
+i <- 1
+this_country <- df$NAME[i]
+this_capital <- df$capital[i]
+title_string <- paste("Country:", this_country)
+subtitle_string <- paste("Capital:", this_capital)
+df %>%
+  filter(NAME == this_country) %>%
+  ggplot() +
+  geom_sf(fill = "blue") +
+  theme(legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_text(color = "black", hjust = 0.5, size = 20),
+        plot.title = element_text(color = "red", hjust = 0.5, size = 20)) + 
+  labs(title = title_string,
+       subtitle = subtitle_string,
+       caption = "30 Day Map Challenge\nDay 25: Interactive Map",
+       x = "", y = "")
+```
+
+```{r}
+for(i in 1:N){
+  this_country <- df$NAME[i]
+  this_capital <- df$capital[i]
+  
+  for(j in 1:3){
+    if(j == 1){
+      title_string <- "Country: ?"
+      subtitle_string <- "Capital: ?"
+    }
+    if(j == 2){
+      title_string <- paste("Country:", this_country)
+      subtitle_string <- "Capital: ?"
+    }
+    if(j == 3){
+      title_string <- paste("Country:", this_country)
+      subtitle_string <- paste("Capital:", this_capital)
+    }
+    
+    temp_plot <- df %>%
+      filter(NAME == this_country) %>%
+      ggplot() +
+      geom_sf(fill = "blue") +
+      theme(legend.position = "none",
+            legend.title = element_blank(),
+            panel.background = element_blank(),
+            panel.grid.minor = element_blank(),
+            plot.subtitle = element_text(color = "black", 
+                                         hjust = 0.5, size = 20),
+            plot.title = element_text(color = "red", 
+                                      hjust = 0.5, size = 20)) + 
+      labs(title = title_string,
+           subtitle = subtitle_string,
+           caption = "30 Day Map Challenge\nDay 25: Interactive Map",
+           x = "", y = "")
+    
+    dev.new(width = 1100, height = 628, units = "px", noRStudioGD = T)
+    ggsave(temp_plot, file = paste0("plot_", i, "_", j, ".jpeg"),
+           width = dev.size()[1],
+           height = dev.size()[2])
+    dev.off()
+  }
+}
+```

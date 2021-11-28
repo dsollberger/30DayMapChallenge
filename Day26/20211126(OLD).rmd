@@ -1,0 +1,80 @@
+---
+title: "Day 26"
+author: "Derek Sollberger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# library("raster")
+# library("stars") #convert raster to sf
+library("sf")
+library("sp")
+library("terra")
+library("tidyverse")
+library("tmap")
+```
+
+```{r}
+# load shape file
+CA_counties_shp <- st_read("../CA_Counties/CA_Counties_TIGER2016.shp")
+
+# load raster file
+# rainfall_raster <- raster("stanford-qd450mp3166-geotiff.tif")
+# rainfall_sf <- read_stars("stanford-qd450mp3166-geotiff.tif")
+
+
+rainfall_terra <- terra::rast("stanford-qd450mp3166-geotiff.tif")
+#downsample?
+rainfall_terra <- terra::aggregate(rainfall_terra, fact = 20)
+
+# plot(rainfall_terra)
+```
+
+```{r}
+CA_counties_shp <- CA_counties_shp %>%
+  # mutate(county_area = st_area(geometry)) %>%
+  st_transform(crs = 4326)
+```
+
+```{r}
+rainfall_df <- as.data.frame(rainfall_terra, xy = TRUE)
+colnames(rainfall_df) <- c("x", "y", "avg")
+# rainfall_mat <- rasterToPoints(rainfall_raster)
+rainfall_points <- rainfall_df %>%
+  st_as_sf(coords = c("x", "y")) %>%
+  st_set_crs(4326)
+```
+
+```{r}
+combined_data <- CA_counties_shp %>%
+  st_join(rainfall_points)
+# 
+# CA_counties_revert <- CA_counties_shp
+# CA_counties_revert$geometry <- CA_counties_revert$geometry %>%
+#   s2::s2_rebuild() %>%
+#   sf::st_as_sfc(FALSE)
+
+# combined_data <- sp::over(CA_counties_shp, rainfall_points)
+```
+
+```{r}
+combined_data <- combined_data %>%
+  group_by(NAME) %>%
+  mutate(avg_avg = mean(avg, na.rm = TRUE)) %>%
+  ungroup() %>%
+  select(NAME, avg_avg, geometry) %>%
+  distinct()
+```
+
+```{r}
+# combined_data %>%
+#   ggplot() +
+#   geom_sf(aes(fill = avg_avg))
+```
+
+```{r}
+# tm_shape(rainfall_terra) + tm_fill(col = "avg")
+```
+

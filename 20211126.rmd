@@ -1,0 +1,52 @@
+---
+title: "Day 26"
+author: "Derek Sollberger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# library("patchwork")
+library("sf")
+library("tidyverse")
+```
+
+```{r}
+# load shape files
+states_shp <- st_read("cb_2018_us_state_5m/cb_2018_us_state_5m.shp")
+
+# load data file
+same_sex_marriage <- readxl::read_xlsx("same_sex_marriage.xlsx") %>%
+  mutate(group_favor = cut(Favor,
+                           breaks = c(41, 53, 61, 67, 80),
+                           labels(c("slightly disfavor",
+                                    "slightly favor",
+                                    "in favor",
+                                    "strongly in favor"))))
+```
+
+```{r}
+states_shp %>%
+  left_join(same_sex_marriage, by = c("NAME" = "Region")) %>%
+  ggplot() +
+  geom_sf(aes(fill = 100*Favor)) +
+  scale_fill_gradient(name = "Global Acceptance Index",
+                      low = "#999247", high = "#8C4799") +
+  xlim(-125, -65) +
+  ylim(25, 50) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "right",
+        legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_text(color = "#999247", hjust = 0.5, size = 15),
+        plot.title = element_text(color = "#8C4799", hjust = 0.5, size = 20)) + 
+  labs(title = "State Populations in Favor of Same-Sex Marriage",
+       subtitle = "30 Day Map Challenge, Day 26: Choropleth",
+       caption = "Data Source: Public Religion Research Institute (2017)",
+       x = "", y = "")
+```
+

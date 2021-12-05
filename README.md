@@ -15,7 +15,7 @@ my simple maps
 ![Day 12](Day12.jpeg)
 ![Day 13](Day13.jpeg)
 ![Day 14](Day14.jpg)
-![Day15 UC Merced (without a computer)](Day15_-_UC Merced (without a computer).jpeg)
+![Day15](Day15_-_UC Merced (without a computer).jpeg)
 ![Day 16](Day16.jpeg)
 ![Day 17](Day17.jpeg)
 ![Day 18](Day18.jpeg)

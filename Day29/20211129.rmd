@@ -1,0 +1,166 @@
+---
+title: "Day 29"
+author: "Derek Sollberger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("imager")
+# library("jpeg")
+library("patchwork")
+library("tidyverse")
+
+# https://stackoverflow.com/questions/2547402/how-to-find-the-statistical-mode
+rmode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+```
+
+```{r}
+# im_jpeg <- readJPEG("SuperMetroidMapZebes.jpg")
+im <- imager::load.image("SuperMetroidMapZebes.jpg")
+```
+
+```{r}
+dim(im)
+
+# dimensions in units of screenshots
+screen_x <- dim(im)[1] / 256
+screen_y <- dim(im)[2] / 256
+```
+```{r}
+# https://dahtah.github.io/imager/gettingstarted.html
+df <- as.data.frame(im, wide = "c")
+```
+
+```{r}
+new_df <- df %>%
+  filter(c.1 != 0 & c.2 != 0 & c.3 != 0) %>%
+  mutate(new_x = x %/% 256 + 1,
+         new_y = y %/% 256 + 1) %>%
+  group_by(new_x, new_y) %>%
+  mutate(c1_mean = mean(c.1),
+         c2_mean = mean(c.2),
+         c3_mean = mean(c.3)) %>%
+  mutate(c1_median = median(c.1),
+         c2_median = median(c.2),
+         c3_median = median(c.3)) %>%
+  mutate(c1_mode = rmode(c.1),
+         c2_mode = rmode(c.2),
+         c3_mode = rmode(c.3)) %>%
+  ungroup() %>%
+  select(new_x, new_y,
+         c1_mean, c2_mean, c3_mean,
+         c1_median, c2_median, c3_median,
+         c1_mode, c2_mode, c3_mode) %>%
+  distinct()
+```
+
+```{r}
+new_df <- new_df %>%
+  mutate(rgb_mean = rgb(c1_mean, c2_mean, c3_mean),
+         rgb_median = rgb(c1_median, c2_median, c3_median),
+         rgb_mode = rgb(c1_mode, c2_mode, c3_mode))
+```
+
+```{r}
+plot_mean <- new_df %>%
+  ggplot(aes(x = new_x, y = new_y)) +
+  geom_raster(aes(fill = rgb_mean)) +
+  scale_fill_identity() +
+  scale_y_reverse() +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_text(color = "gray25", 
+                                     hjust = 0.5, size = 15),
+        plot.title = element_text(color = "black", 
+                                  hjust = 0.5, size = 20)) + 
+  labs(title = "Mean",
+       subtitle = "30 Day Map Challenge, Day 29: NULL",
+       caption = "Data Source: SNES maps",
+       x = "", y = "")
+```
+
+```{r}
+plot_median <- new_df %>%
+  ggplot(aes(x = new_x, y = new_y)) +
+  geom_raster(aes(fill = rgb_median)) +
+  scale_fill_identity() +
+  scale_y_reverse() +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_text(color = "gray25", 
+                                     hjust = 0.5, size = 15),
+        plot.title = element_text(color = "black", 
+                                  hjust = 0.5, size = 20)) + 
+  labs(title = "Median",
+       subtitle = "30 Day Map Challenge, Day 29: NULL",
+       caption = "Data Source: SNES maps",
+       x = "", y = "")
+```
+
+
+```{r}
+plot_mode <- new_df %>%
+  ggplot(aes(x = new_x, y = new_y)) +
+  geom_raster(aes(fill = rgb_mode)) +
+  scale_fill_identity() +
+  scale_y_reverse() +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_text(color = "gray25", 
+                                     hjust = 0.5, size = 15),
+        plot.title = element_text(color = "black", 
+                                  hjust = 0.5, size = 20)) + 
+  labs(title = "Mode",
+       subtitle = "30 Day Map Challenge, Day 29: NULL",
+       caption = "Data Source: SNES maps",
+       x = "", y = "")
+```
+
+```{r, eval = FALSE}
+plot_original <- df %>%
+  mutate(rgb_val = rgb(c.1, c.2, c.3)) %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_raster(aes(fill = rgb_val)) +
+  scale_fill_identity() +
+  scale_y_reverse() +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_text(color = "gray25", 
+                                     hjust = 0.5, size = 15),
+        plot.title = element_text(color = "black", 
+                                  hjust = 0.5, size = 20)) + 
+  labs(title = "Original",
+       subtitle = "",
+       caption = "",
+       x = "", y = "")
+```
+
+```{r}
+# final_plot <- (plot_original + plot_mean) / (plot_median + plot_median)
+```
+

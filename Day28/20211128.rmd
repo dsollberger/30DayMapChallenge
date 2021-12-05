@@ -19,6 +19,7 @@ countries_shp <- st_read("../ne_50m_admin_0_countries/ne_50m_admin_0_countries.s
 
 ```{r}
 for(lon in 0:359){
+  # if((lon %% 4) == 0){
   coord_string <- paste0("+proj=laea +lat_0=37.3 +lon_0=",
   lon, " +x_0=0 +y_0=0 +ellps=GRS80 +units=m +no_defs")
   
@@ -48,6 +49,7 @@ for(lon in 0:359){
          width = dev.size()[1],
          height = dev.size()[2])
   dev.off()
+  # }
 }
 
 ```

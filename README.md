@@ -1,5 +1,5 @@
 # 30DayMapChallenge
-my simple maps
+Here are my simple maps made in R with packages such as `ggplot2`, `sf`, `terra`, etc.
 
 ![Day 1](Day1.jpg)
 ![Day 2](Day2.jpg)
@@ -15,7 +15,7 @@ my simple maps
 ![Day 12](Day12.jpeg)
 ![Day 13](Day13.jpeg)
 ![Day 14](Day14.jpg)
-![Day15](Day15_-_UC Merced (without a computer).jpg)
+![Day 15](Day15.jpg)
 ![Day 16](Day16.jpeg)
 ![Day 17](Day17.jpeg)
 ![Day 18](Day18.jpeg)

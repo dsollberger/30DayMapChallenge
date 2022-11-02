@@ -1,0 +1,159 @@
+---
+title: "30 Day Map Challenge Day 2"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-01"
+---
+
+```{r}
+#| message: false
+#| warning: false
+library("basemaps")
+library("ggrepel")
+library("sf")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# load shape file(s)
+us_cities <- st_read("../data/UScities/citiesx010g.shp")
+
+# load my "lines"
+train_lines <- readxl::read_xlsx("lines.xlsx")
+
+data(ext)
+```
+```{r, eval = FALSE}
+train_lines <- data.frame(seg = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 
+13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 
+29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40), depart = c("San Francisco", 
+"South San Francisco", "Redwood City", "San Jose", "Monterey", 
+"San Luis Obispo", "Santa Barbara", "Los Angeles", "Irvine", 
+"Carlsbad", "Sacramento", "Elk Grove", "Stockton", "Modesto", 
+"Merced", "Fresno", "Visalia", "Bakersfield", "Los Angeles", 
+"West Covina", "San Francisco", "Oakland", "Walnut Creek", "Fairfield", 
+"Sacramento", "South Lake Tahoe", "Carson City", "Reno", "Ely", 
+"West Wendover", "Salt Lake City", "West Wendover", "Ely", "Saint George", 
+"Las Vegas", "Barstow", "San Bernardino", "Riverside", "Temecula", 
+"Escondido"), arrive = c("South San Francisco", "Redwood City", 
+"San Jose", "Monterey", "San Luis Obispo", "Santa Barbara", "Los Angeles", 
+"Irvine", "Carlsbad", "San Diego", "Elk Grove", "Stockton", "Modesto", 
+"Merced", "Fresno", "Visalia", "Bakersfield", "Los Angeles", 
+"West Covina", "San Bernardino", "Oakland", "Walnut Creek", "Fairfield", 
+"Sacramento", "South Lake Tahoe", "Carson City", "Reno", "Ely", 
+"West Wendover", "Salt Lake City", "West Wendover", "Ely", "Saint George", 
+"Las Vegas", "Barstow", "San Bernardino", "Riverside", "Temecula", 
+"Escondido", "San Diego"), color = c("blue", "blue", "blue", 
+"blue", "blue", "blue", "blue", "blue", "blue", "blue", "green", 
+"green", "green", "green", "green", "green", "green", "green", 
+"green", "green", "yellow", "yellow", "yellow", "yellow", "yellow", 
+"yellow", "yellow", "yellow", "yellow", "yellow", "red", "red", 
+"red", "red", "red", "red", "red", "red", "red", "red"), line = c("San Francisco to San Diego", 
+"San Francisco to San Diego", "San Francisco to San Diego", "San Francisco to San Diego", 
+"San Francisco to San Diego", "San Francisco to San Diego", "San Francisco to San Diego", 
+"San Francisco to San Diego", "San Francisco to San Diego", "San Francisco to San Diego", 
+"Sacramento to San Bernardino", "Sacramento to San Bernardino", 
+"Sacramento to San Bernardino", "Sacramento to San Bernardino", 
+"Sacramento to San Bernardino", "Sacramento to San Bernardino", 
+"Sacramento to San Bernardino", "Sacramento to San Bernardino", 
+"Sacramento to San Bernardino", "Sacramento to San Bernardino", 
+"San Francisco to Salt Lake City", "San Francisco to Salt Lake City", 
+"San Francisco to Salt Lake City", "San Francisco to Salt Lake City", 
+"San Francisco to Salt Lake City", "San Francisco to Salt Lake City", 
+"San Francisco to Salt Lake City", "San Francisco to Salt Lake City", 
+"San Francisco to Salt Lake City", "San Francisco to Salt Lake City", 
+"Salt Lake City to San Diego", "Salt Lake City to San Diego", 
+"Salt Lake City to San Diego", "Salt Lake City to San Diego", 
+"Salt Lake City to San Diego", "Salt Lake City to San Diego", 
+"Salt Lake City to San Diego", "Salt Lake City to San Diego", 
+"Salt Lake City to San Diego", "Salt Lake City to San Diego"))
+```
+
+```{r}
+# 
+city_list <- unique(c(train_lines$depart, train_lines$arrive))
+
+stops <- us_cities |>
+  filter(STATE %in% c("CA", "NV", "UT")) |>
+  filter(NAME %in% city_list) |>
+  filter(GNIS_ID != 1427871) |> #removing extra "Fairfield" in Utah
+  filter(GNIS_ID != 1431861) |> #removing extra "Riverside" in Utah
+  filter(GNIS_ID != 1432990) #removing extra "Stockton" in Utah
+
+stops_depart <- stops |>
+  left_join(train_lines, by = c("NAME" = "depart")) |>
+  select(NAME, PopPlLat, PopPlLong, color, line, seg)
+stops_arrive <- stops |>
+  left_join(train_lines, by = c("NAME" = "arrive")) |>
+  select(NAME, PopPlLat, PopPlLong, color, line, seg)
+
+# (I am avoiding spatial data types for today)
+stops_depart <- data.frame(stops_depart)
+stops_arrive <- data.frame(stops_arrive)
+
+# preparing for geom_segment
+train_segments <- stops_depart |>
+  full_join(stops_arrive, by = "seg") |>
+  filter(!is.na(line.x))
+```
+
+```{r}
+# make rough map
+stops |>
+  ggplot() +
+  geom_sf()
+```
+
+```{r}
+# make map!
+description <- "Data source: geodata.lib.utexas.edu\n
+Map assembled by Derek Sollberger"
+
+d02_plot <- train_segments |>
+  ggplot() +
+  # basemap_gglayer(ext) +
+  geom_segment(aes(x = PopPlLong.x, y = PopPlLat.x,
+                   xend = PopPlLong.y, yend = PopPlLat.y,
+                   color = line.x), size = 3) +
+  geom_label_repel(aes(x = PopPlLong, y = PopPlLat,
+                      label = NAME), 
+                   data = stops,
+                   max.overlaps = 20) +
+  labs(title = "Dreaming of a High-Speed Rail System\nIn the Western United States",
+       subtitle = "30 Day Map Challenge, Day 2: Lines",
+       caption = description,
+       x = "", y = "") +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white"),
+        plot.title = element_text(color = "black", hjust = 0.5, 
+                                    size = 40, vjust = -50),
+        plot.subtitle = element_text(color = "black", hjust = 0.5, 
+                                    size = 30, vjust = -75),
+        plot.caption = element_text(color = "black", hjust = 0.75, 
+                                    size = 20, vjust = 50))
+```
+
+```{r}
+# maybe use Canva instead?
+d02_plot <- d02_plot +
+  labs(title = "", subtitle = "", caption = "")
+```
+
+
+```{r}
+ggsave("d02map.png", d02_plot,
+       device = "png", width = 2200,
+       height = 1256, units = "px")
+```
+

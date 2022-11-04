@@ -1,0 +1,171 @@
+---
+title: "30 Day Map Challenge Day 3"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-03"
+---
+
+```{r}
+#| cache: true
+#| message: false
+#| warning: false
+
+library("ggimage")
+library("patchwork")
+library("sf")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# load shape file(s)
+merced_road_shp <- st_read("../data/Merced_County_Road_Centerlines/Road_Centerlines.shp")
+
+# load my "polygons"
+stores_coords <- readxl::read_xlsx("stores.xlsx")
+```
+
+```{r, eval = FALSE}
+stores_coords <- data.frame(store = c("Dollar Tree", "Dollar Tree", "Dollar Tree", 
+"Unocal 76", "Unocal 76", "Unocal 76", "Unocal 76", "McDonalds", 
+"McDonalds", "McDonalds", "McDonalds", "McDonalds", "Starbucks", 
+"Starbucks", "Starbucks", "Starbucks", "Starbucks", "Starbucks", 
+"Seven Eleven", "Seven Eleven", "Seven Eleven", "Seven Eleven", 
+"Seven Eleven", "Seven Eleven", "Seven Eleven"), lat = c(37.3199158733633, 
+37.3219635840174, 37.3079015137705, 37.3221104181308, 37.3182879872476, 
+37.2975342562021, 37.2898867008485, 37.3205881274896, 37.3208611563583, 
+37.278256662656, 37.2916414429881, 37.3022929339224, 37.3250826552804, 
+37.3343645251479, 37.2906751397751, 37.3017364154004, 37.307471251272, 
+37.3226254977863, 37.3264373865129, 37.3365380077153, 37.3209770258576, 
+37.2901185352636, 37.2828799766281, 37.3078705415731, 37.3212500533135
+), long = c(-120.500023198059, -120.467064216486, -120.492470098115, 
+-120.487663561722, -120.46929579595, -120.458481130121, -120.453159627888, 
+-120.502083152654, -120.472900721053, -120.432560300898, -120.454189632555, 
+-120.493156761811, -120.486290325564, -120.460026137122, -120.454189650802, 
+-120.481998791504, -120.492641795971, -120.480110516519, -120.487491973347, 
+-120.467579255313, -120.468952546212, -120.452644716787, -120.446808230467, 
+-120.491096861956, -120.487320311984))
+```
+
+```{r}
+# load images
+# dollar_tree_logo <- png::readPNG("dollar_tree_logo.png")
+# mcdonalds_logo <- png::readPNG("mcdonalds_logo.png")
+# seven_eleven_logo <- png::readPNG("seven_eleven_logo.png")
+# starbucks_logo <- png::readPNG("starbucks_logo.png")
+# unocal_76_logo <- png::readPNG("unocal_76_logo.png")
+```
+
+
+```{r}
+# make basemap
+basemap <- merced_road_shp |>
+  ggplot() +
+  geom_sf() +
+  xlim(-120.51, -120.43) +
+  ylim(37.27, 37.34) + 
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white"))
+```
+
+```{r}
+# 3 Dollar Trees
+p3 <- basemap +
+  geom_polygon(aes(x = long, y = lat), 
+               data = stores_coords |> filter(store == "Dollar Tree"),
+               alpha = 0.5,
+               color = "#03963B", fill = "#6AC046", size = 2) +
+  geom_image(aes(x = long, y = lat, image = "dollar_tree_logo.png"),
+               data = stores_coords |> filter(store == "Dollar Tree")) +
+  labs(title = "Dollar Tree\nTriangle",
+       x = "", y = "") +
+  theme(plot.title = element_text(color = "#03963B", 
+                                  hjust = 0.5,
+                                  size = 24))
+```
+
+```{r}
+# 4 Unocal 76
+p4 <- basemap +
+  geom_polygon(aes(x = long, y = lat), 
+               data = stores_coords |> filter(store == "Unocal 76"),
+               alpha = 0.5, 
+               color = "#0000AA", fill = "#FF8000", size = 2) +
+  geom_image(aes(x = long, y = lat, image = "unocal_76_logo.png"),
+               data = stores_coords |> filter(store == "Unocal 76")) +
+  labs(title = "76\nQuadrilateral",
+       x = "", y = "") +
+  theme(plot.title = element_text(color = "#0000AA", 
+                                  hjust = 0.5,
+                                  size = 24))
+```
+
+```{r}
+# 5 McDonalds
+# https://usbrandcolors.com/mcdonalds-colors/
+p5 <- basemap +
+  geom_polygon(aes(x = long, y = lat), 
+               data = stores_coords |> filter(store == "McDonalds"),
+               alpha = 0.5, 
+               color = "#DA291C", fill = "#FFC72C", size = 2) +
+  geom_image(aes(x = long, y = lat, image = "mcdonalds_logo.png"),
+               data = stores_coords |> filter(store == "McDonalds")) +
+  labs(title = "McDonald's\nPentagon",
+       x = "", y = "") +
+  theme(plot.title = element_text(color = "#DA291C", 
+                                  hjust = 0.5,
+                                  size = 24))
+```
+
+
+```{r}
+# 6 Starbucks
+# https://usbrandcolors.com/starbucks-colors/
+p6 <- basemap +
+  geom_polygon(aes(x = long, y = lat), 
+               data = stores_coords |> filter(store == "Starbucks"),
+               alpha = 0.5, color = "#27251F", 
+               fill = "#00704A", size = 2) +
+  geom_image(aes(x = long, y = lat, image = "starbucks_logo.png"),
+               data = stores_coords |> filter(store == "Starbucks")) +
+  labs(title = "Starbucks\nHexagon",
+       x = "", y = "") +
+  theme(plot.title = element_text(color = "#27251F", 
+                                  hjust = 0.5,
+                                  size = 24))
+```
+
+```{r}
+# 7 7-11
+# https://www.brandcolorcode.com/7-eleven
+p7 <- basemap +
+  geom_polygon(aes(x = long, y = lat), 
+               data = stores_coords |> filter(store == "Seven Eleven"),
+               alpha = 0.5, color = "#EE2526", 
+               fill = "#F4811F", size = 2) +
+  geom_image(aes(x = long, y = lat, image = "seven_eleven_logo.png"),
+               data = stores_coords |> filter(store == "Seven Eleven")) +
+  labs(title = "7-11\nHeptagon",
+       x = "", y = "") +
+  theme(plot.title = element_text(color = "#008163", 
+                                  hjust = 0.5,
+                                  size = 24))
+```
+
+```{r}
+# patchwork
+(p3 + p3 + p4) / (p5 + p6 + p7)
+
+# finished up in Canva
+```
+

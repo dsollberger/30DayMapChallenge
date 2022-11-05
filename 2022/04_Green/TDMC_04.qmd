@@ -1,0 +1,74 @@
+---
+title: "30 Day Map Challenge Day 4"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-04"
+---
+
+```{r}
+#| message: false
+#| warning: false
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+
+lat_min <- 22
+lat_max <- 50
+long_min <- -130
+long_max <- -65
+```
+
+```{r}
+#| message: false
+#| warning: false
+# load shape file(s)
+states_shp <- sf::st_read("../data/US_states/cb_2018_us_state_5m.shp")
+parks_shp <- sf::st_read("../data/NPS_centroids/NPS_-_Land_Resources_Division_Boundary_and_Tract_Data_Service.shp")
+parks_df <- readr::read_csv("NPS_-_Land_Resources_Division_Boundary_and_Tract_Data_Service.csv") |>
+  mutate(lat = (Y / 100000)-9, long = (X / 100000)+9) |>
+  filter(long > long_min & long < long_max) |>
+  filter(lat > lat_min & lat < lat_max)
+```
+
+```{r}
+# make map
+states_shp |>
+  ggplot() +
+  geom_sf() +
+  geom_sf(data = parks_shp) +
+  
+  # https://ggplot2.tidyverse.org/reference/geom_density_2d.html
+  geom_density_2d_filled(aes(x = long, y = lat, fill = ..level..), 
+                         alpha = 0.5,
+                         data = parks_df) +
+  
+  # https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3
+  scale_fill_brewer(palette = "Greens") +
+  
+  labs(title = "2D Density Plot of US National Parks",
+       subtitle = "30 Day Map Challange, Day 4: Green",
+       caption = "Data Source: National Park Service\nMap Created by Derek Sollberger",
+       x = "", y = "") +
+  
+  xlim(long_min, long_max) +
+  ylim(lat_min, lat_max) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white"),
+        plot.title = element_text(color = "#2ca25f", face = "bold",
+                                  size = 25, hjust = 0.5),
+        plot.subtitle = element_text(color = "#2ca25f",
+                                  size = 20, hjust = 0.5),
+        plot.caption = element_text(color = "#2ca25f",
+                                  size = 15, hjust = 0.5))
+```
+
+

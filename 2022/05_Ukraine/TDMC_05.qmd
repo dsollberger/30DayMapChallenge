@@ -1,0 +1,133 @@
+---
+title: "30 Day Map Challenge Day 5"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-04"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("gt")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#| message: false
+#| warning: false
+# load spreadsheet
+data_df <- readxl::read_xlsx("Ukrainian_mathematicians.xlsx")
+
+# putting first name first
+ukrainian_mathematicians <- data_df |>
+  separate(name, into = c("last", "first"), sep = ", ") |>
+  mutate(mathematician = paste(first, last)) |>
+  select(mathematician, specialty)
+```
+
+```{r, eval = FALSE}
+ukrainian_mathematicians <- data.frame(mathematician = c("Naum Ilyich Akhiezer", "Vladimir Igorevich Arnold", 
+"Leonid Viktorovich Berlyand", "Sergei Natanovich Bernstein", 
+"Abram Samoilovitch Besicovitch", "Valentina Mikhailovna Borok", 
+"Volodymyr Gershonovych Drinfeld", "Oleksandr Emmanuilovich Eremenko", 
+"Anatoliy Timofeevich Fomenko", "Israel Moiseevich Gelfand", 
+"Yakov Lazarevich Geronimus", "Victor Mihailovich Glushkov", 
+"Anatolii Asirovich Goldberg", "Dmytro Olexandrovych Grave", 
+"Mikhail Iosiphovich Kadets", "Yuri Kondratiev", "Volodymyr Semenovych Korolyuk", 
+"Volodymyr Dmytrovych Koshmanenko", "Myhailo Pylypovych Kravchuk", 
+"Mark Grigorievich Krein", "Mykola Mytrofanovych Krylov", "Volodymyr Olexandrovych Marchenko", 
+"Maryna Viazovska", "Yurii Oleksiyovych Mitropolskiy", "Mark Aronovich Naimark", 
+"Leonid Andriyovych Pastur", "Georgii Yurii Pfeiffer", "Aleksei Vasil'evich Pogorelov", 
+"Anatoliy Myhailovych Samoilenko", "Igor Rostislavovich Shafarevich", 
+"Naum Zuselevevich Shor", "Anatoliy Volodymyrovych Skorokhod", 
+"Pavlo Samuilovich Urysohn", "Myhailo Y Vaschenko-Zakharchenko", 
+"Georgiy Feodosiyovych Voronyi", "Myhailo Yosypovych Yadrenko"
+), specialty = c("conformal mappings", "stability of integrable systems", 
+"homogenization theory", "basis for Bézier curves", "combinatorial methods", 
+"Cauchy problem for PDEs", "moduli space of Yang-Mills instantons", 
+"value distribution theory", "variational calculus", "Banach algebra theory", 
+"Geronimus polynomials", "theory of automata", "construction of meromorphic functions", 
+"Galois theory", "Banach spaces", "stochastic calculus", "probability theory", 
+"conflict dynamical systems", "integral equations", "operator theory", 
+"asymptotics", "Sturm-Liouville operators", "sphere packing", 
+"nonlinear oscillations", "spectral thoery of ODEs", "random matrix theory", 
+"systems of PDEs", "nonlinear theory of thin shells", "impulsive differential equations", 
+"algebraic geometry", "subgradient methods", "stochastic differential equations", 
+"dimension theory", "history of mathematics", "Voronoi diagram", 
+"theory of random fields"))
+```
+
+
+```{r}
+# make table
+# https://www.flagcolorcodes.com/ukraine
+table1 <- ukrainian_mathematicians |>
+  slice(1:18) |>
+  gt() |>
+  tab_header(title = md("**Ukrainian Mathematicans**")) |>
+  cols_align(align = "center") |>
+  tab_style(
+    style = list(
+      cell_fill(color = "#0057B7"),
+      cell_text(color = "white")
+    ),
+    locations = cells_title()
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = "#FFDD00"),
+      cell_text(color = "black")
+    ),
+    locations = cells_column_labels()
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = "#0057B7"),
+      cell_text(color = "white")
+    ),
+    locations = cells_body(columns = c(mathematician, specialty))
+  )
+```
+
+```{r}
+# make table
+# https://www.flagcolorcodes.com/ukraine
+table2 <- ukrainian_mathematicians |>
+  slice(19:36) |>
+  gt() |>
+  tab_header(title = md("**Ukrainian Mathematicans**")) |>
+  cols_align(align = "center") |>
+  tab_style(
+    style = list(
+      cell_fill(color = "#FFDD00"),
+      cell_text(color = "black")
+    ),
+    locations = cells_title()
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = "#0057B7"),
+      cell_text(color = "white")
+    ),
+    locations = cells_column_labels()
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = "#FFDD00"),
+      cell_text(color = "black")
+    ),
+    locations = cells_body(columns = c(mathematician, specialty))
+  )
+```
+
+
+```{r}
+table1 |> gtsave("table1.png")
+table2 |> gtsave("table2.png")
+```
+

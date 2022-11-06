@@ -1,0 +1,103 @@
+---
+title: "30 Day Map Challenge Day 6"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-06"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("igraph")
+library("ggraph")
+# library("GGally") # for ggnet package to graph networks
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#| message: false
+#| warning: false
+
+# data source: https://github.com/geodatasource/country-borders
+# borders_df <- readr::read_csv("https://github.com/geodatasource/country-borders/blob/master/GEODATASOURCE-COUNTRY-BORDERS.CSV")
+```
+
+Before I loaded the data set, I adjusted the following in the data:
+
+* added "borders" for missing data to connect island nations to (hopefully) their closest neighbor
+* classified each country by continent
+* added a link between Greenland and Iceland to connect continents (similar to the board game Risk)
+
+```{r}
+#| message: false
+#| warning: false
+borders_df <- readxl::read_xlsx("borders.xlsx")
+```
+
+```{r}
+# make network
+# borders_net <- network::network(borders_df, multiple = TRUE)
+vertex_df <- borders_df |>
+  select(country_code, country_name, region) |>
+  distinct()
+
+edge_df <- borders_df |>
+  select(country_code, country_border_code, region) |>
+  distinct()
+
+# borders_network <- simplify(as.network(
+#   edge_df, vertices = vertex_df,
+#   multiple = TRUE))
+borders_network <- igraph::graph_from_data_frame(
+  d = edge_df,
+  vertices = vertex_df,
+  directed = FALSE
+)
+```
+
+```{r}
+# make plot
+# https://briatte.github.io/ggnet/#example-4-french-mps-on-twitter
+# ggnet2(borders_network)
+```
+
+
+```{r, eval = FALSE}
+# make igraph
+vertex_labels <- V(borders_network)$country_code
+# color_palette <- c("red", "orange", "yellow", "green", "blue", "gray50", "purple")
+vertex_colors <- V(borders_network)$color
+edge_starts <- ends(borders_network,
+                    es = E(borders_network),
+                    names = FALSE)[,1]
+edge_colors <- V(borders_network)$color[edge_starts]
+
+plot(borders_network,
+     edge.col = vertex_colors,
+     vertex.color = vertex_colors,
+     vertex.label.color = "black",
+     vertex.label = vertex_labels,
+     vertex.shape = "circle")
+```
+
+```{r}
+# make ggraph
+# http://www.kateto.net/wp-content/uploads/2019/06/Sunbelt%202019%20R%20Network%20Visualization%20Workshop.pdf
+# I don't know why "county_name" worked but "county_code" did not
+# 'repel' was too powerful with this many nodes
+set.seed(20221106)
+ggraph(borders_network, layout = "lgl") +
+  geom_edge_link(aes(color = region)) + 
+  geom_node_point(aes(color = region), size = 5) +
+  geom_node_text(aes(label = country_name),
+                 color = "black", 
+                 # repel = TRUE,
+                 size = 3) +
+  theme_void()
+```
+

@@ -1,0 +1,140 @@
+---
+title: "30 Day Map Challenge Day 7"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-07"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Idea for today
+
+* raster of California average rainfall 1961 to 1990 (4km)
+* raster of California average rainfall 1971 to 2000 (800m, so need to downsample)
+* convert to data frames
+* take difference
+
+```{r}
+# https://geodata.lib.berkeley.edu/catalog/stanford-wq585xv0760
+ca_rain_tif_1 <- terra::rast("CA_annual_rainfall_1961_1990.tif")
+
+# https://geodata.lib.berkeley.edu/catalog/stanford-fs379qr8881
+ca_rain_tif_2 <- terra::rast("CA_annual_rainfall_1971_2000.tif")
+
+
+# ca_rain_tif_2 <- terra::aggregate(ca_rain_tif_2, fact = 2)
+ca_rain_df_1 <- as.data.frame(ca_rain_tif_1, xy = TRUE)
+ca_rain_df_2 <- as.data.frame(ca_rain_tif_2, xy = TRUE)
+
+colnames(ca_rain_df_1) <- c("x", "y", "rain")
+colnames(ca_rain_df_2) <- c("x", "y", "rain")
+```
+
+(hmm, it turned out that the older raster had a lot of data too? ... no need to downsample)
+
+The coordinates in the data frames do not completely align
+
+* `ca_rain_df_1` has `nrow(ca_rain_df_1)` observations 
+* `ca_rain_df_2` has `nrow(ca_rain_df_2)` observations 
+
+Naively, perhaps I can still merge the data as is and still have a decent amount of data for the visualization
+
+```{r, eval = FALSE}
+combined_df <- ca_rain_df_1 |>
+  left_join(ca_rain_df_2, by = c("x", "y"))
+```
+
+Nope, just missing values everywhere!
+
+# Rounded Coordinates
+
+Last year, I rounded latitude coordinates to the nearest 0.2 degrees and the longitude coordinates to the nearest degree.  Perhaps that will help the alignment of rasters.
+
+```{r}
+round_any = function(x, accuracy, f=round){f(x/ accuracy) * accuracy}
+
+ca_rain_df_1_rounded <- ca_rain_df_1 %>%
+  mutate(round_x = round_any(x, 0.2),
+         round_y = round_any(y, 0.2)) %>%
+  group_by(round_x, round_y) %>%
+  mutate(avg_rain = mean(rain, na.rm = TRUE)) %>%
+  ungroup() %>%
+  select(round_x, round_y, avg_rain) |>
+  distinct()
+
+ca_rain_df_2_rounded <- ca_rain_df_2 %>%
+  mutate(round_x = round_any(x, 0.2),
+         round_y = round_any(y, 0.2)) %>%
+  group_by(round_x, round_y) %>%
+  mutate(avg_rain = mean(rain, na.rm = TRUE)) %>%
+  ungroup() %>%
+  select(round_x, round_y, avg_rain) |>
+  distinct()
+```
+
+Now, maybe it will be easier to merge the data.
+
+```{r}
+combined_df <- ca_rain_df_1_rounded |>
+  left_join(ca_rain_df_2_rounded, by = c("round_x", "round_y")) |>
+  filter(!is.na(avg_rain.y))
+```
+
+Let us compute the change in average rainfall as a percentage.
+
+```{r}
+combined_df <- combined_df |>
+  mutate(pct_change = 100* (avg_rain.y - avg_rain.x) / avg_rain.x)
+
+summary(combined_df$pct_change)
+```
+The scale is affected by a couple of outliers, so I am going to filter out the areas whose average rainfall was under 5 inches of rain per year.
+
+## Visualization
+
+
+
+```{r}
+main_plot <- combined_df |>
+  filter(avg_rain.x > 5) |>
+  ggplot() +
+  geom_point(aes(x = round_x, y = round_y, 
+                 color = pct_change, size = 10)) +
+  scale_color_gradient(name = "percent change",
+                       low = "red", high = "blue") +
+  # scale_size(range = c(0,3)) +
+  guides(size = "none") +
+  labs(title = "Average Rainfall in California",
+       subtitle = "30 Day Map Challenge, Day 7: Raster",
+       caption = "Data Source: UC Berkeley Library Geodata\nFile 1: Average Rainfall (1961 to 1900)\nFile 2: Average Rainfall (1971 to 2000)\n(and then I calculated the difference in averages)\nMap made by Derek Sollberger",
+       x = "", y = "") +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.key.size = unit(2, 'cm'),
+        legend.position = c(0.7, 0.8),
+        legend.title = element_text(color = "blue",
+                                    size = 30),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.title = element_text(color = "blue", face = "bold",
+                                  hjust = 0.5, 
+                                  size = 40),
+        plot.subtitle = element_text(color = "red", 
+                                     hjust = 0.5, 
+                                     size = 30),
+        plot.caption = element_text(color = "black", 
+                                    hjust = 0.0, vjust = 20,
+                                    size = 20))
+  
+```
+

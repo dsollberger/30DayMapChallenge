@@ -1,0 +1,78 @@
+---
+title: "30 Day Map Challenge Day 9"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-09"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("sf")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#| message: false
+#| warning: false
+
+# https://github.com/caseymm/img2geojson
+
+# load geoJSON file
+lylat_JSON <- st_read("Lylat.geojson")
+```
+
+```{r}
+# make crude map
+lylat_JSON |>
+  ggplot() +
+  geom_sf(aes(fill = id))
+
+lat_min <- 36
+lat_max <- 46
+long_min <- -125
+long_max <- -105
+```
+
+
+```{r}
+# make map
+# https://stackoverflow.com/questions/64602323/read-geojson-file-using-sf-library
+# https://stackoverflow.com/questions/51255832/how-to-add-an-image-on-ggplot-background-not-the-panel
+# https://stock.adobe.com/images/deep-space-high-definition-star-field-background-starry-outer-space-background-texture-colorful-starry-night-sky-outer-space-background/275024742
+foreground <- lylat_JSON |>
+  ggplot() +
+  ggpubr::background_image(png::readPNG("space_background.png")) +
+  geom_sf(aes(fill = id)) +
+  labs(title = "",
+       subtitle = "",
+       caption = "",
+       x = "", y = "") +
+  # xlim(long_min, long_max) +
+  # ylim(lat_min, lat_max) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white"),
+        plot.title = element_text(color = "#2ca25f", face = "bold",
+                                  size = 48, hjust = 0.5),
+        plot.subtitle = element_text(color = "#2ca25f",
+                                  size = 36, hjust = 0.5),
+        plot.caption = element_text(color = "#2ca25f",
+                                  size = 24, hjust = 0.5))
+
+## add background
+# ggimage::ggbackground(foreground, "space_background.png")
+```
+
+

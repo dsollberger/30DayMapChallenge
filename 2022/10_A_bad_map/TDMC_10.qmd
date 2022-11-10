@@ -1,0 +1,72 @@
+---
+title: "30 Day Map Challenge Day 10"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-10"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("sf")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+```{r}
+#| message: false
+#| warning: false
+
+
+# load shape file(s)
+newport_beach_shp <- st_read("../City_Boundary/City Boundary.shp")
+```
+
+```{r}
+# wrangle with data
+merced_toilets_data_raw <- merced_osm_data_raw$osm_points |>
+  filter(!is.na(amenity))
+merced_toilets_df <- data.frame(
+  st_coordinates(st_centroid(merced_toilets_data_raw$geometry)),
+  id = merced_toilets_data_raw$amenity
+)
+```
+
+
+```{r}
+# make map
+main_plot <- merced_road_shp |>
+  ggplot() +
+  geom_sf() +
+  geom_image(aes(x = X, y = Y, image = "toilet_icon.png"),
+             data = merced_toilets_df) +
+  labs(title = "Hunting for a Toilet in Merced?",
+       subtitle = "30 Day Map Challange, Day 8: OpenStreetMap",
+       caption = "Data Source: OpenStreetMap\nMap Created by Derek Sollberger",
+       x = "", y = "") +
+  
+  xlim(long_min, long_max) +
+  ylim(lat_min, lat_max) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white"),
+        plot.title = element_text(color = "#2ca25f", face = "bold",
+                                  size = 48, hjust = 0.5),
+        plot.subtitle = element_text(color = "#2ca25f",
+                                  size = 36, hjust = 0.5),
+        plot.caption = element_text(color = "#2ca25f",
+                                  size = 24, hjust = 0.5))
+```
+
+

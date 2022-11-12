@@ -1,0 +1,755 @@
+---
+title: "30 Day Map Challenge Day 11"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-11"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("gt")
+library("sf")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+
+lat_min <- 22
+lat_max <- 50
+long_min <- -130
+long_max <- -65
+```
+
+```{r}
+#| message: false
+#| warning: false
+
+# load baseball colors
+load("baseball_colors.RData")
+
+# load data file(s)
+roster_df <- readxl::read_xlsx("roster.xlsx")
+
+# load shape file(s)
+us_states_shp <- st_read("../data/US_States/cb_2018_us_state_5m.shp")
+```
+
+```{r}
+# make table(s)
+pitcher_table <- roster_df |>
+  filter(class == "pitcher") |>
+  select(name, season_2020, after_2020) |>
+  gt() |>
+  tab_header(title = md("**Pitchers**")) |>
+  cols_align(align = "center") |>
+  tab_style(
+    style = list(
+      cell_fill(color = Reds_color_1),
+      cell_text(color = Reds_color_2)
+    ),
+    locations = cells_title()
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Reds_color_1),
+      cell_text(color = Reds_color_2)
+    ),
+    locations = cells_column_labels()
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Reds_color_1),
+      cell_text(color = Reds_color_2)
+    ),
+    locations = cells_body(
+      columns = c(season_2020))
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Angels_color_1),
+      cell_text(color = Angels_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Los Angeles Angels"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Astros_color_1),
+      cell_text(color = Astros_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Houston Astros"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Athletics_color_1),
+      cell_text(color = Athletics_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Oakland Athletics"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Blue_Jays_color_1),
+      cell_text(color = Blue_Jays_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Toronto Blue Jays"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Braves_color_1),
+      cell_text(color = Braves_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Atlanta Braves"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Brewers_color_1),
+      cell_text(color = Brewers_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Milwaukee Brewers"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Cardinals_color_1),
+      cell_text(color = Cardinals_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "St Louis Cardinals"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Cubs_color_1),
+      cell_text(color = Cubs_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Chicago Cubs"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Diamondbacks_color_1),
+      cell_text(color = Diamondbacks_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Arizona Diamondbacks"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Dodgers_color_1),
+      cell_text(color = Dodgers_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Los Angeles Dodgers"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Giants_color_1),
+      cell_text(color = Giants_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "San Francisco Giants"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Guardians_color_1),
+      cell_text(color = Guardians_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Cleveland Guardians"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Mariners_color_1),
+      cell_text(color = Mariners_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Seattle Mariners"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Marlins_color_1),
+      cell_text(color = Marlins_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Miami Marlins"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Mets_color_1),
+      cell_text(color = Mets_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "New York Mets"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Nationals_color_1),
+      cell_text(color = Nationals_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Washington Nationals"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Orioles_color_1),
+      cell_text(color = Orioles_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Baltimore Orioles"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Padres_color_1),
+      cell_text(color = Padres_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "San Diego Padres"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Phillies_color_1),
+      cell_text(color = Phillies_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Philadelphia Phillies"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Pirates_color_1),
+      cell_text(color = Pirates_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Pittsburgh Pirates"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Rangers_color_1),
+      cell_text(color = Rangers_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Texas Rangers"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Rays_color_1),
+      cell_text(color = Rays_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Tampa Bay Rays"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Red_Sox_color_1),
+      cell_text(color = Red_Sox_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Boston Red Sox"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Reds_color_1),
+      cell_text(color = Reds_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Cincinnati Reds"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Rockies_color_1),
+      cell_text(color = Rockies_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Colorado Rockies"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Royals_color_1),
+      cell_text(color = Royals_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Kansas City Royals"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Tigers_color_1),
+      cell_text(color = Tigers_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Detroit Tigers"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Twins_color_1),
+      cell_text(color = Twins_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Minnesota Twins"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = White_Sox_color_1),
+      cell_text(color = White_Sox_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Chicago White Sox"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Yankees_color_1),
+      cell_text(color = Yankees_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "New York Yankees"
+    )
+  )
+
+position_table <- roster_df |>
+  filter(class == "position") |>
+  select(name, season_2020, after_2020) |>
+  gt() |>
+  tab_header(title = md("**Pitchers**")) |>
+  cols_align(align = "center") |>
+  tab_style(
+    style = list(
+      cell_fill(color = Reds_color_1),
+      cell_text(color = Reds_color_2)
+    ),
+    locations = cells_title()
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Reds_color_1),
+      cell_text(color = Reds_color_2)
+    ),
+    locations = cells_column_labels()
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Reds_color_1),
+      cell_text(color = Reds_color_2)
+    ),
+    locations = cells_body(
+      columns = c(season_2020))
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Angels_color_1),
+      cell_text(color = Angels_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Los Angeles Angels"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Astros_color_1),
+      cell_text(color = Astros_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Houston Astros"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Athletics_color_1),
+      cell_text(color = Athletics_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Oakland Athletics"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Blue_Jays_color_1),
+      cell_text(color = Blue_Jays_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Toronto Blue Jays"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Braves_color_1),
+      cell_text(color = Braves_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Atlanta Braves"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Brewers_color_1),
+      cell_text(color = Brewers_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Milwaukee Brewers"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Cardinals_color_1),
+      cell_text(color = Cardinals_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "St Louis Cardinals"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Cubs_color_1),
+      cell_text(color = Cubs_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Chicago Cubs"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Diamondbacks_color_1),
+      cell_text(color = Diamondbacks_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Arizona Diamondbacks"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Dodgers_color_1),
+      cell_text(color = Dodgers_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Los Angeles Dodgers"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Giants_color_1),
+      cell_text(color = Giants_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "San Francisco Giants"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Guardians_color_1),
+      cell_text(color = Guardians_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Cleveland Guardians"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Mariners_color_1),
+      cell_text(color = Mariners_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Seattle Mariners"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Marlins_color_1),
+      cell_text(color = Marlins_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Miami Marlins"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Mets_color_1),
+      cell_text(color = Mets_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "New York Mets"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Nationals_color_1),
+      cell_text(color = Nationals_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Washington Nationals"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Orioles_color_1),
+      cell_text(color = Orioles_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Baltimore Orioles"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Padres_color_1),
+      cell_text(color = Padres_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "San Diego Padres"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Phillies_color_1),
+      cell_text(color = Phillies_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Philadelphia Phillies"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Pirates_color_1),
+      cell_text(color = Pirates_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Pittsburgh Pirates"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Rangers_color_1),
+      cell_text(color = Rangers_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Texas Rangers"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Rays_color_1),
+      cell_text(color = Rays_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Tampa Bay Rays"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Red_Sox_color_1),
+      cell_text(color = Red_Sox_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Boston Red Sox"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Reds_color_1),
+      cell_text(color = Reds_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Cincinnati Reds"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Rockies_color_1),
+      cell_text(color = Rockies_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Colorado Rockies"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Royals_color_1),
+      cell_text(color = Royals_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Kansas City Royals"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Tigers_color_1),
+      cell_text(color = Tigers_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Detroit Tigers"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Twins_color_1),
+      cell_text(color = Twins_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Minnesota Twins"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = White_Sox_color_1),
+      cell_text(color = White_Sox_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "Chicago White Sox"
+    )
+  ) |>
+  tab_style(
+    style = list(
+      cell_fill(color = Yankees_color_1),
+      cell_text(color = Yankees_color_2)
+    ),
+    locations = cells_body(
+      columns = c(after_2020),
+      row = after_2020 == "New York Yankees"
+    )
+  )
+```
+
+```{r}
+pitcher_table |> gtsave("pitcher_table.png")
+position_table |> gtsave("position_table.png")
+```
+
+```{r}
+# prepare for geom_segment
+roster_df <- roster_df |>
+  separate(from, into = c("from.y", "from.x"), sep = ", ") |>
+  separate(to, into = c("to.y", "to.x"), sep = ", ")
+
+roster_df$from.x <- as.numeric(roster_df$from.x)
+roster_df$from.y <- as.numeric(roster_df$from.y)
+roster_df$to.x <- as.numeric(roster_df$to.x)
+roster_df$to.y <- as.numeric(roster_df$to.y)
+```
+
+
+```{r}
+# make map
+d11_map <- us_states_shp |>
+  ggplot() +
+  geom_sf(color = "white", fill = "black") +
+  geom_segment(aes(x = from.x, y = from.y, xend = to.x, yend = to.y),
+               color = Reds_color_1,
+               data = roster_df, size = 3) +
+  ggrepel::geom_label_repel(aes(x = to.x, y = to.y, label = after_2020),
+                            data = roster_df |>
+                              select(to.x, to.y, after_2020) |>
+                              distinct()) +
+  labs(title = "",
+       subtitle = "",
+       caption = "",
+       x = "", y = "") +
+  
+  xlim(long_min, long_max) +
+  ylim(lat_min, lat_max) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = Reds_color_1),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white"),
+        plot.title = element_text(color = "#2ca25f", face = "bold",
+                                  size = 48, hjust = 0.5),
+        plot.subtitle = element_text(color = "#2ca25f",
+                                  size = 36, hjust = 0.5),
+        plot.caption = element_text(color = "#2ca25f",
+                                  size = 24, hjust = 0.5))
+```
+
+

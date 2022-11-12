@@ -24,40 +24,39 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 # load shape file(s)
-newport_beach_shp <- st_read("../City_Boundary/City Boundary.shp")
+# https://www.newportbeachca.gov/government/departments/city-manager-s-office/information-technology-city-division/gis-mapping/data-catalog
+newport_beach_shp <- st_read("City_Boundary/City Boundary.shp")
+newport_water_shp <- st_read("Water_Features/Water Features.shp")
 ```
 
 ```{r}
-# wrangle with data
-merced_toilets_data_raw <- merced_osm_data_raw$osm_points |>
-  filter(!is.na(amenity))
-merced_toilets_df <- data.frame(
-  st_coordinates(st_centroid(merced_toilets_data_raw$geometry)),
-  id = merced_toilets_data_raw$amenity
-)
+# crude map
+newport_beach_shp |>
+  ggplot() +
+  geom_sf() +
+  geom_sf(data = newport_water_shp)
 ```
 
 
 ```{r}
 # make map
-main_plot <- merced_road_shp |>
+newport_beach_shp |>
   ggplot() +
   geom_sf() +
-  geom_image(aes(x = X, y = Y, image = "toilet_icon.png"),
-             data = merced_toilets_df) +
-  labs(title = "Hunting for a Toilet in Merced?",
-       subtitle = "30 Day Map Challange, Day 8: OpenStreetMap",
-       caption = "Data Source: OpenStreetMap\nMap Created by Derek Sollberger",
+  geom_sf(data = newport_water_shp, fill = "green") +
+  labs(title = "",
+       subtitle = "",
+       caption = "",
        x = "", y = "") +
   
-  xlim(long_min, long_max) +
-  ylim(lat_min, lat_max) +
+  # xlim(long_min, long_max) +
+  # ylim(lat_min, lat_max) +
   theme(axis.text.x = element_blank(),
         axis.text.y = element_blank(),
         axis.ticks = element_blank(),
         legend.position = "none",
         legend.title = element_blank(),
-        panel.background = element_rect(fill = "white"),
+        panel.background = element_rect(fill = "#7fcdff"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         plot.background = element_rect(fill = "white"),

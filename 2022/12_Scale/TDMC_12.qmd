@@ -1,0 +1,162 @@
+---
+title: "30 Day Map Challenge Day 12"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-12"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+# library("ggsn")
+library("ggspatial")
+library("patchwork")
+library("sf")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+
+lat_min <- 22
+lat_max <- 50
+long_min <- -130
+long_max <- -65
+```
+
+```{r}
+#| message: false
+#| warning: false
+
+# load shape file(s)
+merced_road_shp <- st_read("../data/Merced_County_Road_Centerlines/Road_Centerlines.shp")
+ca_counties_shp <- st_read("../data/CA_Counties/CA_Counties_TIGER2016.shp")
+us_states_shp <- st_read("../data/US_States/cb_2018_us_state_5m.shp")
+```
+
+```{r}
+lat_min <- 37.27
+lat_max <- 37.34
+long_min <- -120.51
+long_max <- -120.43
+
+map1 <- merced_road_shp |>
+  ggplot() +
+  geom_sf() +
+  xlim(long_min, long_max) +
+  ylim(lat_min, lat_max) + 
+  # ggsn::north(data = merced_road_shp) +
+  # ggsn::scalebar(data = merced_road_shp,
+  #                dist = 1,
+  #                dist_unit = "mi",
+  #                model = "WGS84",
+  #                transform = FALSE,
+  #                x.min = 0.9*long_min + 0.1*long_max,
+  #                y.min = 0.9*lat_min + 0.1*lat_max) +
+  
+  # https://stackoverflow.com/questions/61809382/how-can-i-put-a-scalebar-and-a-north-arrow-on-the-map-ggplot
+  ggspatial::annotation_scale(
+    location = "bl",
+    bar_cols = c("red", "white")
+  ) +
+  ggspatial::annotation_north_arrow(
+    location = "bl", which_north = "true",
+    pad_x = unit(0.4, "in"), pad_y = unit(0.4, "in"),
+    style = ggspatial::north_arrow_nautical(
+      fill = c("blue", "white"),
+      line_col = "grey20"
+    )
+  ) +
+  labs(title = "City of Merced") +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white"))
+```
+
+```{r}
+# lat_min <- 37.27
+# lat_max <- 37.34
+# long_min <- -120.51
+# long_max <- -120.43
+
+map2 <- ca_counties_shp |>
+  ggplot() +
+  geom_sf() +
+  # xlim(long_min, long_max) +
+  # ylim(lat_min, lat_max) + 
+  ggspatial::annotation_scale(
+    location = "bl",
+    bar_cols = c("red", "white")
+  ) +
+  ggspatial::annotation_north_arrow(
+    location = "bl", which_north = "true",
+    pad_x = unit(0.4, "in"), pad_y = unit(0.4, "in"),
+    style = ggspatial::north_arrow_nautical(
+      fill = c("blue", "white"),
+      line_col = "grey20"
+    )
+  ) +
+  labs(title = "State of California") +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white"))
+```
+
+```{r}
+lat_min <- 22
+lat_max <- 50
+long_min <- -130
+long_max <- -65
+
+map3 <- us_states_shp |>
+  ggplot() +
+  geom_sf() +
+  ggspatial::annotation_scale(
+    location = "bl",
+    bar_cols = c("red", "white")
+  ) +
+  ggspatial::annotation_north_arrow(
+    location = "bl", which_north = "true",
+    pad_x = unit(0.4, "in"), pad_y = unit(0.4, "in"),
+    style = ggspatial::north_arrow_nautical(
+      fill = c("blue", "white"),
+      line_col = "grey20"
+    )
+  ) +
+  labs(title = "Continental United States") +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white")) +
+  xlim(long_min, long_max) +
+  ylim(lat_min, lat_max)
+```
+
+```{r}
+# patchwork
+collage <- map1 + map2 + map3
+collage + plot_annotation(
+  title = "30 Day Map Challange",
+  subtitle = "Day 12: Scales",
+  caption = "Collage by Derek Sollberger"
+)
+```
+

@@ -372,7 +372,7 @@ position_table <- roster_df |>
   filter(class == "position") |>
   select(name, season_2020, after_2020) |>
   gt() |>
-  tab_header(title = md("**Pitchers**")) |>
+  tab_header(title = md("**Position Players**")) |>
   cols_align(align = "center") |>
   tab_style(
     style = list(

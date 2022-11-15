@@ -1,0 +1,88 @@
+---
+title: "30 Day Map Challenge Day 14"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-14"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("sf")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# load shape file
+USA_hex_shp <- st_read("../data/us_states_hexgrid/us_states_hexgrid.shp")
+
+# load demographics file
+custody_disability <- readxl::read_xlsx("custody_disability.xlsx")
+```
+
+```{r}
+# merge data
+df <- USA_hex_shp |>
+  separate(google_nam, into = c("State", "Country"), sep = "\\(") |>
+  mutate(Region = stringr::str_trim(State)) |>
+  left_join(custody_disability, by = "Region")
+```
+
+```{r}
+# Calculate the centroid of each hexagon to add the label
+# https://stackoverflow.com/questions/49343958/do-the-values-returned-by-rgeosgcentroid-and-sfst-centroid-differ
+centers <- data.frame(
+  st_coordinates(st_centroid(USA_hex_shp$geometry)), 
+  id=USA_hex_shp$iso3166_2)
+```
+
+```{r}
+p2012 <- df %>%
+  ggplot() +
+  geom_sf(aes(fill = Grounds)) +
+  geom_text(aes(x = X, y = Y, label = id),
+            data = centers,
+            size = 2) +
+  labs(title = "2012",
+       subtitle = "States where Disability is Grounds\n for Termination of Parental Rights",
+       caption = "Data Source: National Council on Disability",
+       x = "", y = "") +
+  theme_minimal() +
+  # theme(legend.position = "right") +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_text(color = "blue", hjust = 0.5, size = 16),
+        plot.title = element_text(color = "blue", hjust = 0.5, size = 24)) +
+  guides(fill = guide_legend(title = "Grounds"))
+```
+
+```{r}
+p2022 <- df %>%
+  ggplot() +
+  geom_sf(aes(fill = Grounds)) +
+  geom_text(aes(x = X, y = Y, label = id),
+            data = centers,
+            size = 2) +
+  labs(title = "2022",
+       subtitle = "States where Disability is Grounds\n for Termination of Parental Rights",
+       caption = "30 Day Map Challenge\nDay 14: Hexagons\nDerek Sollberger",
+       x = "", y = "") +
+  theme_minimal() +
+  # theme(legend.position = "right") +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.subtitle = element_text(color = "blue", hjust = 0.5, size = 16),
+        plot.title = element_text(color = "blue", hjust = 0.5, size = 24)) +
+  guides(fill = guide_legend(title = "Grounds"))
+```

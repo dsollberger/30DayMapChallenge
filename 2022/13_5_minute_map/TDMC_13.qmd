@@ -1,0 +1,31 @@
+---
+title: "30 Day Map Challenge Day 13"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-13"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("rayshader")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+```{r}
+# pretty much using the code from
+# https://mobile.twitter.com/researchremora/status/1576640047180181504
+giscoR::gisco_get_countries(country = "Vietnam") |>
+  elevatr::get_elev_raster(z = 5, clip = "location") |> 
+  raster_to_matrix() |>
+  sphere_shade() |>
+  plot_map(title_text = "30 Day Map Challenge\nDay 13: 5-Minute Map")
+```
+
+

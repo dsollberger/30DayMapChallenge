@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # load shape file
 USA_hex_shp <- st_read("../data/us_states_hexgrid/us_states_hexgrid.shp")
 
-# load demographics file
+# https://www.ncd.gov/publications/2012/Sep272012/ApxB
 custody_disability <- readxl::read_xlsx("custody_disability.xlsx")
 ```
 

@@ -1,0 +1,83 @@
+---
+title: "30 Day Map Challenge Day 15"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-15"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("sf")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#| cache: true
+# data source: https://download.geofabrik.de/north-america.html
+# raw_data <- osmextract::oe_read("../data/us-west-latest.osm.pbf")
+# this process took 30 minutes (for a 2.9 GB) file on my computer
+# and only got the streets
+```
+
+```{r}
+# then tried https://cran.r-project.org/web/packages/PDE/vignettes/PDE.html
+# no luck
+```
+
+```{r}
+# All the Places
+# https://www.alltheplaces.xyz/
+
+# https://r-graph-gallery.com/325-background-map-from-geojson-format-in-r.html
+costco_json <- geojsonio::geojson_read("../data/All_The_Places/costco.geojson",
+                                       what = "sp")
+# costco_df <- broom::tidy(costco_json)
+# costco_df <- geojsonsf::geojson_sf(costco_json)
+costco_df <- as.data.frame(costco_json)
+
+# https://tmieno2.github.io/R-as-GIS-for-Economists/turning-a-data-frame-of-points-into-an-sf.html
+costco_ca_sf <- costco_df |>
+  filter(addr.state == "CA") |>
+  st_as_sf(coords = c("coords.x1", "coords.x2"))
+st_crs(costco_ca_sf) <- 4269
+
+costco_ca_df <- data.frame(st_coordinates(costco_ca_sf))
+```
+
+```{r}
+# load shape file(s)
+ca_counties_shp <- st_read("../data/CA_Counties/CA_Counties_TIGER2016.shp")
+```
+
+```{r}
+# plot
+
+# lat_min <- 32
+# lat_max <- 42
+# long_min <- -126
+# long_max <- -114
+
+ca_counties_shp |>
+  ggplot() +
+  geom_sf(color = "blue", fill = "white") +
+  geom_sf(color = "red", 
+          data = costco_ca_sf) + 
+  # ggimage::geom_image(aes(x = X, y = Y, image = "Costco_logo.png"),
+             # data = costco_ca_df)
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white"))
+```
+

@@ -1,0 +1,98 @@
+---
+title: "30 Day Map Challenge Day 16"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-16"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("sf")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# load shape file(s)
+us_cities_shp <- st_read("../data/UScities/citiesx010g.shp")
+us_states_shp <- st_read("../data/US_States/cb_2018_us_state_5m.shp")
+```
+
+# GNIS_ID numbers
+
+* Chicago: 423587
+* St Louis: 765765
+* Riverton: 469345
+* Oklahoma City: 1102140
+* Amarillo: 1351066
+* Albuquerque: 928679
+* Flagstaff: 29046
+* Santa Monica: 1652792
+
+```{r}
+GNIS_ID_nums <- c(423587, 765765, 469345, 1102140, 1351066, 928679, 29046, 1652792)
+states_66 <- c("Illinois", "Missouri", "Kansas", "Oklahoma", "Texas", "New Mexico", "Arizona", "California")
+
+city_sf <- us_cities_shp |>
+  filter(GNIS_ID %in% GNIS_ID_nums)
+state_sf <- us_states_shp |>
+  filter(NAME %in% states_66)
+```
+
+```{r}
+# aiming to create line segments in the geospatial data
+
+city_sf_1 <- us_cities_shp |> 
+  filter(GNIS_ID %in% GNIS_ID_nums[1:7]) |>
+  arrange(LONGITUDE) |>
+  select(NAME, LATITUDE, LONGITUDE)
+city_sf_2 <- us_cities_shp |> 
+  filter(GNIS_ID %in% GNIS_ID_nums[2:8]) |>
+  arrange(LONGITUDE) |>
+  select(NAME, LATITUDE, LONGITUDE)
+colnames(city_sf_2) <- c("NAME2", "LATITUDE2", "LONGITUDE2")
+
+route_66_df <- cbind(city_sf_1, city_sf_2)
+
+# https://stackoverflow.com/questions/58150279/plotting-lines-between-two-sf-point-features-in-r
+# route_66_sf <- st_sfc(mapply(function(a,b){
+#   st_cast(st_union(a,b),"LINESTRING")},
+#   city_sf_1$geometry,
+#   city_sf_2$geometry,
+#   SIMPLIFY=FALSE))
+# route_66_sf <- st_cast(
+#   st_union(city_sf_1$geometry,city_sf_2$geometry),
+#   "LINESTRING") |>
+#   st_multilinestring()
+# st_crs(route_66_sf) <- 4269
+```
+
+```{r}
+# plot
+state_sf |>
+  ggplot() +
+  geom_sf(aes(fill = NAME)) +
+  geom_segment(aes(x = LONGITUDE, y = LATITUDE,
+                   xend = LONGITUDE2, yend = LATITUDE2),
+               color = "red",
+               data = route_66_df,
+               size = 3) +
+  ggimage::geom_image(aes(x = LONGITUDE, y = LATITUDE,
+                          image = "route_66_logo.png"),
+                      data = city_sf) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white"))
+```
+

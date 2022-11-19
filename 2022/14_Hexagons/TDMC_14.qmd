@@ -17,6 +17,9 @@ library("tidyverse")
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+idea from: https://mobile.twitter.com/RobynMPowell/status/1584568422012424195
+
+
 ```{r}
 # load shape file
 USA_hex_shp <- st_read("../data/us_states_hexgrid/us_states_hexgrid.shp")

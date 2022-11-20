@@ -1,0 +1,58 @@
+---
+title: "30 Day Map Challenge Day 20"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-20"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("leaflet")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+
+fountain_lat  <- 41.39019969601212
+fountain_long <- 2.1879284148874207
+```
+
+```{r}
+# zoomed out
+p1 <- leaflet() %>%
+  setView(lng = fountain_long,
+          lat = fountain_lat,
+          zoom = 6) %>%
+  
+  #https://leaflet-extras.github.io/leaflet-providers/preview/
+  addProviderTiles("Esri.NatGeoWorldMap")
+```
+
+```{r}
+# zoomed in
+p2 <- leaflet() %>%
+  setView(lng = fountain_long,
+          lat = fountain_lat,
+          zoom = 12) %>%
+  
+  #https://leaflet-extras.github.io/leaflet-providers/preview/
+  addProviderTiles("Esri.NatGeoWorldMap")
+```
+
+```{r, eval = FALSE}
+# mapview::mapshot did not work
+mapview::mapshot(p1, file = "p1.png")
+mapview::mapshot(p2, file = "p2.png")
+```
+
+```{r}
+htmlwidgets::saveWidget(p1, "p1.html", selfcontained = TRUE)
+webshot2::webshot("p1.html", file = "p1.png")
+
+htmlwidgets::saveWidget(p2, "p2.html", selfcontained = TRUE)
+webshot2::webshot("p2.html", file = "p2.png")
+```
+

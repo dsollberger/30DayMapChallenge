@@ -1,0 +1,139 @@
+---
+title: "30 Day Map Challenge Day 23"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-23"
+---
+
+```{r}
+#| message: false
+#| warning: false
+library("sf")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# load shape file(s)
+us_states_shp <- st_read("../data/US_States/cb_2018_us_state_5m.shp")
+
+# load data file(s)
+movements_df <- readxl::read_xlsx("movements.xlsx")
+
+# load baseball colors
+load("baseball_colors.RData")
+```
+
+```{r, eval = FALSE}
+movements_df <- data.frame(Team = c("Giants", "Dodgers", "Twins", "Braves", 
+"Athletics"), from = c("New York City", "Brooklyn", "Washington DC", 
+"Milwaukee", "Kansas City"), y1 = c(40.8322996135545, 40.6647759627763, 
+38.8731855884921, 43.0281327207682, 39.0617388007152), x1 = c(-73.9380106586175, 
+-73.9580703477196, -77.0068964602234, -87.9707942082868, -94.4480396300917
+), to = c("San Francisco", "Los Angeles", "Minnesota", "Atlanta", 
+"Oakland"), y2 = c(37.7787392379124, 34.0793935881374, 44.9818719893987, 
+33.8900528532958, 37.7517727224654), x2 = c(-122.388819190926, 
+-118.220728821546, -93.2773180656252, -84.4665192164723, -122.199644579851))
+```
+
+
+```{r}
+lat_min <- 25.5
+lat_max <- 48.5
+long_min <- -124
+long_max <- -69
+
+basemap <- us_states_shp |>
+  ggplot() +
+  
+  # https://sportsfancovers.com/mlb-team-colors/
+  geom_sf(color = "#BF0D3E", fill = "white") +
+  
+
+  
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "#041E42"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "#041E42")) +
+  xlim(long_min, long_max) +
+  ylim(lat_min, lat_max)
+```
+
+```{r}
+p1 <- basemap +
+    geom_segment(aes(x = x1, y = y1,
+                   xend = x2, yend = y2),
+               arrow = arrow(),
+               color = Giants_color_1,
+               data = movements_df |> filter(Team == "Giants"),
+               size = 4) +
+  theme(axis.title = element_blank())
+```
+
+```{r}
+p2 <- basemap +
+    geom_segment(aes(x = x1, y = y1,
+                   xend = x2, yend = y2),
+               arrow = arrow(),
+               color = Dodgers_color_1,
+               data = movements_df |> filter(Team == "Dodgers"),
+               size = 4) +
+  theme(axis.title = element_blank())
+```
+
+```{r}
+p3 <- basemap +
+    geom_segment(aes(x = x1, y = y1,
+                   xend = x2, yend = y2),
+               arrow = arrow(),
+               color = Twins_color_1,
+               data = movements_df |> filter(Team == "Twins"),
+               size = 4) +
+  theme(axis.title = element_blank())
+```
+
+```{r}
+p4 <- basemap +
+    geom_segment(aes(x = x1, y = y1,
+                   xend = x2, yend = y2),
+               arrow = arrow(),
+               color = Braves_color_1,
+               data = movements_df |> filter(Team == "Braves"),
+               size = 4) +
+  theme(axis.title = element_blank())
+```
+
+```{r}
+p5 <- basemap +
+    geom_segment(aes(x = x1, y = y1,
+                   xend = x2, yend = y2),
+               arrow = arrow(),
+               color = Athletics_color_1,
+               data = movements_df |> filter(Team == "Athletics"),
+               size = 4) +
+  theme(axis.title = element_blank())
+```
+
+```{r}
+ggsave(p1, filename = "p1.png")
+ggsave(p2, filename = "p2.png")
+ggsave(p3, filename = "p3.png")
+ggsave(p4, filename = "p4.png")
+ggsave(p5, filename = "p5.png")
+```
+http://www.capsinfo.com/index.php/mlb/team-logos
+
+
+
+
+
+
+

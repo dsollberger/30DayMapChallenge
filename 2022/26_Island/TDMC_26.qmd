@@ -1,0 +1,132 @@
+---
+title: "30 Day Map Challenge Day 26"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-26"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("sf")
+library("tidyverse")
+library("wesanderson") #color palettes
+# also: https://www.colourlovers.com/palette/323660/Andy_Warhols_Colors
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# load shape file(s)
+# https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/
+countries_shp <- st_read("../data/ne_50m_admin_0_countries/ne_50m_admin_0_countries.shp")
+
+# load data file
+borders_df <- readr::read_csv("GEODATASOURCE-COUNTRY-BORDERS.CSV")
+```
+
+```{r}
+# find islands (i.e. no land borders)
+islands_df <- borders_df |>
+  filter(is.na(country_border_code)) |>
+  filter(is.na(country_border_name)) #for some reason, Nambia was a special case
+
+countries_df <- countries_shp |>
+  right_join(islands_df, by = c("SOVEREIGNT" = "country_name"))
+```
+
+
+```{r}
+# plot 1 (of 4)
+lon <- 0
+
+coord_string <- paste0("+proj=laea +lat_0=0 +lon_0=",
+  lon, " +x_0=0 +y_0=0 +ellps=GRS80 +units=m +no_defs")
+
+p1 <- countries_df %>%
+  mutate(map_color = factor(MAPCOLOR7,
+                            levels = 1:7)) %>%
+  ggplot() +
+  geom_sf(aes(fill = map_color)) +
+  coord_sf(crs = coord_string) +
+  scale_fill_manual(values = wes_palette(7, name = "Zissou1", 
+                                         type = "continuous")) +
+  theme(legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "#FA8C82"),
+        panel.grid.minor = element_blank())
+```
+
+```{r}
+# plot 2 (of 4)
+lon <- 90
+
+coord_string <- paste0("+proj=laea +lat_0=0 +lon_0=",
+  lon, " +x_0=0 +y_0=0 +ellps=GRS80 +units=m +no_defs")
+
+p2 <- countries_df %>%
+  mutate(map_color = factor(MAPCOLOR7,
+                            levels = 1:7)) %>%
+  ggplot() +
+  geom_sf(aes(fill = map_color)) +
+  coord_sf(crs = coord_string) +
+  scale_fill_manual(values = wes_palette(7, name = "Zissou1", 
+                                         type = "continuous")) +
+  theme(legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "#77CC62"),
+        panel.grid.minor = element_blank())
+```
+
+```{r}
+# plot 3 (of 4)
+lon <- 180
+
+coord_string <- paste0("+proj=laea +lat_0=0 +lon_0=",
+  lon, " +x_0=0 +y_0=0 +ellps=GRS80 +units=m +no_defs")
+
+p3 <- countries_df %>%
+  mutate(map_color = factor(MAPCOLOR7,
+                            levels = 1:7)) %>%
+  ggplot() +
+  geom_sf(aes(fill = map_color)) +
+  coord_sf(crs = coord_string) +
+  scale_fill_manual(values = wes_palette(7, name = "Zissou1", 
+                                         type = "continuous")) +
+  theme(legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "#5280C7"),
+        panel.grid.minor = element_blank())
+```
+
+```{r}
+# plot 4 (of 4)
+lon <- -90
+
+coord_string <- paste0("+proj=laea +lat_0=0 +lon_0=",
+  lon, " +x_0=0 +y_0=0 +ellps=GRS80 +units=m +no_defs")
+
+p4 <- countries_df %>%
+  mutate(map_color = factor(MAPCOLOR7,
+                            levels = 1:7)) %>%
+  ggplot() +
+  geom_sf(aes(fill = map_color)) +
+  coord_sf(crs = coord_string) +
+  scale_fill_manual(values = wes_palette(7, name = "Zissou1", 
+                                         type = "continuous")) +
+  theme(legend.position = "none",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "#F0D848"),
+        panel.grid.minor = element_blank())
+```
+
+```{r}
+ggsave(p1, filename = "p1.png", device = "png")
+ggsave(p2, filename = "p2.png", device = "png")
+ggsave(p3, filename = "p3.png", device = "png")
+ggsave(p4, filename = "p4.png", device = "png")
+```
+

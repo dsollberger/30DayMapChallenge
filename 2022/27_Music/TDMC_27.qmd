@@ -1,0 +1,134 @@
+---
+title: "Day 27"
+author: "Derek Sollberger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE)
+# library("diagram")
+# library("ggpubr")
+# library("jpeg")
+library("sf") #handle shape files
+library("tidyverse")
+```
+
+```{r}
+# load shape file
+# https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/
+countries_shp <- st_read("../data/ne_50m_admin_0_countries/ne_50m_admin_0_countries.shp")
+
+# load data file
+carmen_sandiego_df <- readxl::read_xlsx("Carmen_Sandiego.xlsx")
+
+# main color
+carmen_sandiego_red <- "#E0013A"
+
+title_string <- "Where in the World is Carmen Sandiego?"
+subtitle_string <- "30 Day Map Challenge, Day 27: Music"
+```
+```{r, eval = FALSE}
+carmen_sandiego_df <- data.frame(
+  location = c("Kiev", "Carolina", "Berlin", "Belize", 
+"China", "Seoul", "Antarctica", "Red Sea", "Greenland", "Arkansas", 
+"Mekong", "Nashville", "Norway", "Bonaire", "Zimbabwe", "Chicago", 
+"Czechoslovakia", "Pakistan", "Scandinavia", "Perth", "Lima", 
+"Botswana", "Thailand", "Milan", "Amsterdam", "Mali", "Bali", 
+"Ohio", "Oahu"), lat = c(50.4501, 35.759575, 52.520008, 17.189877, 
+39.916667, 37.56, -77.846323, 22, 64.166667, 34.736111, 10.8, 
+36.162222, 59.933333, 12.15, -17.829167, 41.881944, 50.083333, 
+24.86, 59.35, -31.952222, -12.05, -24.658333, 13.75, 45.466944, 
+52.366667, 12.65, -8.335, 39.962222, 21.473), long = c(30.523399, 
+-79.019302, 13.404954, -88.49765, 116.383333, 126.99, 0, 38, 
+-51.733333, -92.331111, 106.65, -86.774444, 10.683333, -68.266667, 
+31.052222, -87.627778, 14.466667, 67.01, 18.066667, 115.858889, 
+-77.033333, 25.908333, 100.483333, 9.19, 4.9, -8, 115.088056, 
+-83.000556, -157.9868), lyric = c("Well she sneaks around the world from Kiev", 
+"to Carolina", "She's a sticky-fingered filcher from Berlin", 
+"down to Belize", "She'll take you for a ride on a slow boat to China", 
+"Steal their Seoul in South Korea", "make Antarctica cry uncle", 
+"From the Red Sea", "to Greenland they'll be singing the blues", 
+"Well they never Arkansas", "her steal the Mekong from the jungle", 
+"She go from Nashville", "to Norway", "Bonaire", "to Zimbabwe", 
+"Chicago to", "to Czechoslovakia and back!", "Well she'll ransack Pakistan", 
+"and run a scam in Scandinavia", "Then she'll stick 'em up Down Under and go pick-pocket Perth", 
+"misdemeanor when she stole the beans from Lima", "Ooh, Botswana", 
+"to Thailand", "Milan", "via Amsterdam", "Mali", "to Bali", "Ohio", 
+"Tell me where in the world is Carmen Sandiego?")
+)
+```
+
+
+```{r}
+p0 <- countries_shp %>%
+    ggplot() +
+    geom_sf(fill = "#39e001") +
+    geom_point(data = carmen_sandiego_df,
+                 aes(x = long[1], y = lat[1]), 
+                 color = carmen_sandiego_red, 
+                 size = 2) +
+    theme(legend.position = "right",
+          legend.title = element_blank(),
+          panel.background = element_blank(),
+          panel.grid.minor = element_blank(),
+          plot.background = element_rect(fill = "white"),
+          plot.title = element_text(color = carmen_sandiego_red, 
+                                    hjust = 0.5, size = 20),
+          plot.subtitle = element_text(color = "black", hjust = 0.5, size = 15),
+          plot.caption = element_text(color = carmen_sandiego_red, 
+                                      hjust = 0.5,
+                                      size = 15,
+                                      vjust = 25)) + 
+    labs(title = str_sub(title_string, 1, 10),
+         subtitle = str_sub(subtitle_string, 29, 35),
+         caption = carmen_sandiego_df$lyric[1],
+         x = "", y = "")
+
+ggsave(p0, file = paste0("plot_0.png"),
+       device = "png",
+       width = 2200, height = 1256, units = "px")
+```
+
+
+```{r}
+for(i in 1:28){
+  temp_plot <- countries_shp %>%
+    ggplot() +
+    # background_image(readJPEG("Carmen_Sandiego_logo.jpg")) +
+    geom_sf(fill = "#39e001") +
+    geom_segment(data = carmen_sandiego_df,
+                 aes(x = long[i], y = lat[i], xend = long[i+1], yend = lat[i+1]),
+                 arrow = arrow(), 
+                 color = carmen_sandiego_red, 
+                 lineend = "butt", linejoin = "round",
+                 size = 2) +
+    theme(legend.position = "right",
+          legend.title = element_blank(),
+          panel.background = element_blank(),
+          panel.grid.minor = element_blank(),
+          plot.background = element_rect(fill = "white"),
+          plot.title = element_text(color = carmen_sandiego_red, 
+                                    hjust = 0.5, size = 20),
+          plot.subtitle = element_text(color = "black", hjust = 0.5, size = 15),
+          plot.caption = element_text(color = carmen_sandiego_red, 
+                                      hjust = 0.5,
+                                      size = 15,
+                                      vjust = 25)) + 
+    labs(title = str_sub(title_string, 1, 10 + i),
+         subtitle = str_sub(subtitle_string, 29 - i, 35),
+         caption = carmen_sandiego_df$lyric[i+1],
+         x = "", y = "")
+  
+  # dev.new(width = 1100, height = 628, units = "px", noRStudioGD = T)
+  ggsave(temp_plot, file = paste0("plot_", i, ".png"),
+         # width = dev.size()[1],
+         # height = dev.size()[2])
+         device = "png",
+         # width = 400, height = 300, units = "px")
+         width = 2200, height = 1256, units = "px")
+  # dev.off()
+}
+
+```
+

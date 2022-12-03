@@ -1,0 +1,66 @@
+---
+title: "30 Day Map Challenge Day 29"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-29"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("sf")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# load shape file(s)
+# https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/
+countries_shp <- st_read("../data/ne_50m_admin_0_countries/ne_50m_admin_0_countries.shp")
+
+# load data file
+# https://old.reddit.com/r/dataisbeautiful/comments/ydc3r8/oc_whose_stuff_does_the_british_museum_have/
+british_museum_df <- readxl::read_xlsx("british_museum.xlsx")
+```
+
+```{r}
+# merge data
+museum_df <- countries_shp |> 
+  right_join(british_museum_df, by = c("ADMIN" = "country"))
+```
+
+
+```{r}
+countries_shp %>%
+  ggplot() +
+  geom_sf() +
+  
+  # countries mentioned (gradient color scheme)
+  geom_sf(aes(fill = artifacts),
+          data = museum_df) +
+  
+  # give UK England's red color
+  # https://www.flagcolorcodes.com/great-britain
+  geom_sf(data = countries_shp |> filter(ADMIN == "United Kingdom"),
+          fill = "#C8102E") +
+  
+  guides(fill = guide_legend(title = "Artifacts Tagged\n(thousands)")) +
+  labs(title = "Number of Artifacts tagged in the British Museum",
+       subtitle = "30 Day Map Challenge, Day 29: Out of my Comfort Zone",
+       caption = "Data Source: u/tabthough\nMap by Derek Sollberger") +
+  scale_fill_gradient(low = "#012169", high = "#C8102E") +
+  theme(legend.position = "right",
+        plot.background = element_rect(fill = "#012169"),
+        plot.title = element_text(color = "white",
+                                  face = "bold",
+                                  size = 30),
+        plot.subtitle = element_text(color = "white",
+                                     size = 20),
+        plot.caption = element_text(color = "white",
+                                    size = 10))
+```
+

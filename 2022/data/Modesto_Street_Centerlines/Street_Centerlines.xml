@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><MD_Metadata xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:xalan="http://xml.apache.org/xalan" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xmlns="http://www.isotc211.org/2005/gmd">
+    <characterSet>
+        <MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</MD_CharacterSetCode>
+    </characterSet>
+    <hierarchyLevel>
+        <MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">dataset</MD_ScopeCode>
+    </hierarchyLevel>
+    <hierarchyLevelName>
+        <gco:CharacterString>dataset</gco:CharacterString>
+    </hierarchyLevelName>
+    <contact gco:nilReason="missing"/>
+    <dateStamp gco:nilReason="missing"/>
+    <metadataStandardName>
+        <gco:CharacterString>ISO 19139 Geographic Information - Metadata - Implementation Specification</gco:CharacterString>
+    </metadataStandardName>
+    <metadataStandardVersion>
+        <gco:CharacterString>2007</gco:CharacterString>
+    </metadataStandardVersion>
+    <identificationInfo>
+        <MD_DataIdentification>
+            <citation>
+                <CI_Citation>
+                    <title>
+                        <gco:CharacterString>Streets</gco:CharacterString>
+                    </title>
+                    <date gco:nilReason="missing"/>
+                </CI_Citation>
+            </citation>
+            <abstract>
+                <gco:CharacterString>Centerlines of streets within Stanislaus County</gco:CharacterString>
+            </abstract>
+            <purpose>
+                <gco:CharacterString>Centerlines of streets within Stanislaus County</gco:CharacterString>
+            </purpose>
+            <credit>
+                <gco:CharacterString>Streets</gco:CharacterString>
+            </credit>
+            <descriptiveKeywords>
+                <MD_Keywords>
+                    <keyword>
+                        <gco:CharacterString>Streets</gco:CharacterString>
+                    </keyword>
+                </MD_Keywords>
+            </descriptiveKeywords>
+            <resourceConstraints>
+                <MD_Constraints>
+                    <useLimitation>
+                        <gco:CharacterString>By using the Stanislaus County web page and accessing the Geographic Information Systems (GIS) data, you as the party requesting the data (hereafter the “Requestor”), assume all risks associated with the use of this site including any risk to your computer, software or data of being damaged by any virus, software, or any other file, which might be transmitted or activated via County’s web page or your access to it.  Stanislaus County makes no warranty, expressed or implied, or representation as to the accuracy, timeliness or completeness of any of the data. Maps and (GIS) data are provided for illustration and informational purposes only and are not suitable for legal, engineering, or surveying purposes.  While every effort has been made to ensure that the data is accurate, the maps and GIS data do not represent a legal survey and are not to be relied upon for any purpose whatsoever. Maps based on the GIS data are not legal documents. Requestor is admonished that errors and omissions are likely present in the maps and GIS data.  The GIS data is provided “as is” and with all faults and Requestor is strongly admonished to verify any data upon which Requestor intends to rely and to review or consult other sources. Requestor by accessing the GIS data agrees to forever waive any and all rights, claims, causes of action or other recourse that it might otherwise have against the County of Stanislaus and that County of Stanislaus shall not be liable to Requestor or any other for any injuries or damages of any type, whether direct, indirect, incidental, consequential or otherwise, resulting from any error or omission in the data or in any programming used to obtain the data, by the inadequacy of the data obtained, by any error or omission of County of Stanislaus or Requestor’s systems, by any delay or failure to provide service, or by any other interruption, disruption or loss to Requestor’s operations or in any manner arising out of or related to the data retrieved hereunder. Requestor is solely responsible for any and all consequences of use of the data provided. Requestor agrees to indemnify, defend, and hold Stanislaus County harmless for any and all liability of any nature arising out of or resulting from the Requestor’s access of the data, or the use of the data. Any maps, publications, reports or other documents produced that utilize this digital data will credit the County of Stanislaus and the source of the data, such as “GIS data supplied by Stanislaus County” and shall attach a duplicate of this disclaimer.The Requestor acknowledges that he/she has read this disclaimer and understands it and is bound by its terms and conditions.</gco:CharacterString>
+                    </useLimitation>
+                </MD_Constraints>
+            </resourceConstraints>
+            <language gco:nilReason="missing"/>
+            <characterSet>
+                <MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</MD_CharacterSetCode>
+            </characterSet>
+        </MD_DataIdentification>
+    </identificationInfo>
+</MD_Metadata>

@@ -1,0 +1,96 @@
+---
+title: "30 Day Map Challenge Day 28"
+author: "Derek Sollberger"
+format: 
+  html:
+    toc: true
+date: "2022-11-28"
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+library("ggspatial")
+# library("patchwork")
+library("sf")
+library("tidyverse")
+
+knitr::opts_chunk$set(echo = TRUE)
+
+# lat_min <- 22
+# lat_max <- 50
+# long_min <- -130
+# long_max <- -65
+```
+
+```{r}
+#| message: false
+#| warning: false
+
+# load shape file(s)
+modesto_road_shp <- st_read("../data/Modesto_Street_Centerlines/GIS_Planning_SDE_Major_Road_Maps_V2.shp")
+
+# data file
+tripleD_df <- data.frame(name = c("Bauer's 66 1/2 Skillet and Grill", "Food Fix Truck", 
+"Commonwealth Gastropub"), lat = c(37.6681673817461, 37.6539532492081, 
+37.6421316664511), long = c(-120.993581161875, -121.01751396667, 
+-120.999853223939))
+```
+
+```{r}
+lat_min <- 37.6
+lat_max <- 37.7
+long_min <- -121.1
+long_max <- -120.9
+
+modesto_road_shp |>
+  ggplot() +
+  geom_sf(color = "#9B5B92",
+          fill = "#CDA56F") +
+  
+  xlim(long_min, long_max) +
+  ylim(lat_min, lat_max) +
+
+  geom_label(aes(x = long, y = lat, label = name),
+             data = tripleD_df,
+             nudge_x = 0.03,
+             nudge_y = 0.005) +
+  
+  ggimage::geom_image(aes(x = long, y = lat),
+                      data = tripleD_df,
+                      image = "TripleDsign.png") +
+  
+  ggspatial::annotation_scale(
+    location = "bl",
+    bar_cols = c("red", "white")
+  ) +
+  ggspatial::annotation_north_arrow(
+    location = "bl", which_north = "true",
+    pad_x = unit(0.4, "in"), pad_y = unit(0.4, "in"),
+    style = ggspatial::north_arrow_nautical(
+      fill = c("blue", "white"),
+      line_col = "grey20"
+    )
+  ) +
+  labs(title = "Diners, Drive-Ins, and Dives in Modesto",
+       subtitle = "30 Day Map Challenge, Day 28: 3D",
+       caption = "Derek Sollberger") +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "white"),
+        plot.title = element_text(size = 20, 
+                                  color = "#9B5B92",
+                                  hjust = 0.5),
+        plot.subtitle = element_text(size = 15, 
+                                  color = "#9B5B92",
+                                  hjust = 0.5)
+        )
+```
+

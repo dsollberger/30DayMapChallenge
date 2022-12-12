@@ -1,7 +1,7 @@
 # 30DayMapChallenge
 Here are my simple maps made in R with packages such as `ggplot2`, `sf`, `terra`, etc.
 
-![Day 1](Day1.jpg)
+![Day 1](2022/01_Points/Day1.jpg)
 ![Day 2](Day2.jpg)
 ![Day 3](Day3.jpeg)
 ![Day 4](Day4.jpeg)
